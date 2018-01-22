@@ -48,7 +48,7 @@ class AuthCodeRepositoryTest extends TestCase {
                 Mockery::mock(ObjectRepository::class)
                     ->shouldReceive('findOneBy')
                     ->once()
-                    ->with('1')
+                    ->with(['identifier' => '1'])
                     ->andReturn(null)->getMock()
             );
 
@@ -71,7 +71,7 @@ class AuthCodeRepositoryTest extends TestCase {
                 Mockery::mock(ObjectRepository::class)
                     ->shouldReceive('findOneBy')
                     ->once()
-                    ->with('1')
+                    ->with(['identifier' => '1'])
                     ->andReturn($code)
                     ->getMock()
             );
@@ -87,53 +87,79 @@ class AuthCodeRepositoryTest extends TestCase {
     }
 
     public function testRevokeAuthCode() {
+        $code = new AuthCode();
+        $code->setIdentifier('1');
+
         $this->entityManagerMock
             ->shouldReceive('getRepository')
-            ->twice()
+            ->once()
             ->with(AuthCode::class)
             ->andReturn(
                 Mockery::mock(ObjectRepository::class)
                     ->shouldReceive('findOneBy')
                     ->once()
-                    ->with('1')
-                    ->andReturn(null)->getMock()
+                    ->with(['identifier' => '1'])
+                    ->andReturn($code)->getMock()
             );
         $this->entityManagerMock
             ->shouldReceive('remove')
-            ->twice()
-            ->with(['1', '2']);
+            ->once()
+            ->with($code);
 
         $this->repository->revokeAuthCode('1');
-        $this->repository->revokeAuthCode('2');
+        $this->entityManagerMock->mockery_verify();
+        $this->assertTrue(true);
+    }
+
+
+    public function testRevokeAuthCodeNoExist() {
+        $this->entityManagerMock
+            ->shouldReceive('getRepository')
+            ->once()
+            ->with(AuthCode::class)
+            ->andReturn(
+                Mockery::mock(ObjectRepository::class)
+                    ->shouldReceive('findOneBy')
+                    ->once()
+                    ->with(['identifier' => '1'])
+                    ->andReturn(null)->getMock()
+            );
+
+        $this->repository->revokeAuthCode('1');
+        $this->entityManagerMock->mockery_verify();
+        $this->assertTrue(true);
     }
 
     public function testIsAuthCodeRevoked() {
 
         $this->entityManagerMock
             ->shouldReceive('getRepository')
-            ->twice()
+            ->once()
             ->with(AuthCode::class)
             ->andReturn(
                 Mockery::mock(ObjectRepository::class)
                     ->shouldReceive('findOneBy')
                     ->once()
-                    ->with('1')
+                    ->with(['identifier' => '1'])
                     ->andReturn(null)->getMock()
             );
         $this->assertTrue($this->repository->isAuthCodeRevoked(1));
 
         $this->entityManagerMock
             ->shouldReceive('getRepository')
-            ->twice()
+            ->once()
             ->with(AuthCode::class)
             ->andReturn(
                 Mockery::mock(ObjectRepository::class)
                     ->shouldReceive('findOneBy')
                     ->once()
-                    ->with('1')
+                    ->with(['identifier' => '2'])
                     ->andReturn('something')->getMock()
             );
-        $this->assertFalse($this->repository->isAuthCodeRevoked(2));
+        $this->assertFalse($this->repository->isAuthCodeRevoked('2'));
+
+        $this->entityManagerMock->mockery_verify();
+        $this->assertTrue(true);
     }
 
 }

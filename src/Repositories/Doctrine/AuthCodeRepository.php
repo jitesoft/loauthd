@@ -30,7 +30,17 @@ class AuthCodeRepository extends AbstractRepository implements AuthCodeRepositor
      * @throws UniqueTokenIdentifierConstraintViolationException
      */
     public function persistNewAuthCode(AuthCodeInterface $authCodeEntity) {
-        // TODO: Implement persistNewAuthCode() method.
+        $out = $this->em->getRepository(AuthCode::class)->findOneBy([
+            'identifier' => $authCodeEntity->getIdentifier()
+        ]);
+
+        if ($out !== null) {
+            throw new UniqueTokenIdentifierConstraintViolationException(
+                'AuthCode already exist.', 0, 'Unique constraint failed.'
+            );
+        }
+
+        $this->em->persist($authCodeEntity);
     }
 
     /**
@@ -39,7 +49,15 @@ class AuthCodeRepository extends AbstractRepository implements AuthCodeRepositor
      * @param string $codeId
      */
     public function revokeAuthCode($codeId) {
-        // TODO: Implement revokeAuthCode() method.
+        $out = $this->em->getRepository(AuthCode::class)->findOneBy([
+            'identifier' => $codeId
+        ]);
+
+        if ($out === null) {
+            return;
+        }
+
+        $this->em->remove($out);
     }
 
     /**
@@ -50,6 +68,10 @@ class AuthCodeRepository extends AbstractRepository implements AuthCodeRepositor
      * @return bool Return true if this code has been revoked
      */
     public function isAuthCodeRevoked($codeId) {
-        // TODO: Implement isAuthCodeRevoked() method.
+        $out = $this->em->getRepository(AuthCode::class)->findOneBy([
+            'identifier' => $codeId
+        ]);
+
+        return $out == null;
     }
 }

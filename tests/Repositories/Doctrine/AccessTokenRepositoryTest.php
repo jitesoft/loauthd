@@ -36,7 +36,7 @@ class AccessTokenRepositoryTest extends TestCase {
         $this->assertInstanceOf(
             AccessTokenEntityInterface::class,
             $this->repository->getNewToken(
-                new Client(),
+                new Client('test', '?https://example.com'),
                 [],
                 1
             )
@@ -44,7 +44,7 @@ class AccessTokenRepositoryTest extends TestCase {
     }
 
     public function testPersistNewAccessToken() {
-        $token = new AccessToken(new Client(), [], Carbon::now());
+        $token = new AccessToken(new Client('test', '?https://example.com'), [], Carbon::now());
         $token->setIdentifier(1);
 
         $this->entityManagerMock->shouldReceive('getRepository')->once()->with(get_class($token))->andReturn(
@@ -63,7 +63,7 @@ class AccessTokenRepositoryTest extends TestCase {
     }
 
     public function testPersistNewAccessTokenExists() {
-        $token = new AccessToken(new Client(), [], Carbon::now());
+        $token = new AccessToken(new Client('test', '?https://example.com'), [], Carbon::now());
         $token->setIdentifier(1);
 
         $this->entityManagerMock->shouldReceive('getRepository')->once()->with(get_class($token))->andReturn(
@@ -83,7 +83,7 @@ class AccessTokenRepositoryTest extends TestCase {
     }
 
     public function testRevokeAccessToken() {
-        $token = new AccessToken(new Client(), [], Carbon::now());
+        $token = new AccessToken(new Client('test', '?https://example.com'), [], Carbon::now());
         $token->setIdentifier(1);
 
         $this->entityManagerMock->shouldReceive('getRepository')->once()->with(get_class($token))->andReturn(
@@ -100,7 +100,7 @@ class AccessTokenRepositoryTest extends TestCase {
     }
 
     public function testIsAccessTokenRevoked() {
-        $token = new AccessToken(new Client(), [], Carbon::now());
+        $token = new AccessToken(new Client('test', '?https://example.com'), [], Carbon::now());
         $token->setIdentifier(1);
 
         $this->entityManagerMock->shouldReceive('getRepository')->once()->with(get_class($token))->andReturn(
@@ -114,7 +114,7 @@ class AccessTokenRepositoryTest extends TestCase {
         $this->entityManagerMock->shouldReceive('getRepository')->once()->with(get_class($token))->andReturn(
             Mockery::mock(ObjectRepository::class)->shouldReceive('findOneBy')->once()->with([
                 'identifier' => 1
-            ])->andReturn(new AccessToken(new Client(), [], Carbon::now()))->getMock()
+            ])->andReturn(new AccessToken(new Client('test', '?https://example.com'), [], Carbon::now()))->getMock()
         );
 
         $this->assertFalse($this->repository->isAccessTokenRevoked('1'));
