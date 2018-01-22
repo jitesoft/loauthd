@@ -8,12 +8,20 @@ namespace Jitesoft\OAuth\Lumen\Repositories\Doctrine;
 
 use Carbon\Carbon;
 use Jitesoft\OAuth\Lumen\Entities\AccessToken;
-use League\OAuth2\Server\Entities\AccessTokenEntityInterface as Token;
-use League\OAuth2\Server\Entities\ClientEntityInterface;
-use League\OAuth2\Server\Entities\ScopeEntityInterface;
-use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
-use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
+use League\OAuth2\Server\{
+    Entities\AccessTokenEntityInterface as Token,
+    Entities\ClientEntityInterface,
+    Entities\ScopeEntityInterface,
+    Exception\UniqueTokenIdentifierConstraintViolationException,
+    Repositories\AccessTokenRepositoryInterface
+};
 
+/**
+ * Class AccessTokenRepository
+ *
+ * Doctrine implementation of the AccessTokenRepositoryInterface provided by League\OAuth2\Server.
+ * Makes use of the EntityManager::getRepository(AccessToken::class) methods.
+ */
 class AccessTokenRepository extends AbstractRepository implements AccessTokenRepositoryInterface {
 
     /**
@@ -26,6 +34,7 @@ class AccessTokenRepository extends AbstractRepository implements AccessTokenRep
      * @return Token
      */
     public function getNewToken(ClientEntityInterface $clientEntity, array $scopes, $userIdentifier = null): Token {
+        $this->logger->debug('Creating new access token.');
         return new AccessToken($clientEntity, $scopes, Carbon::now()->addHour(1), $userIdentifier);
     }
 
@@ -41,6 +50,11 @@ class AccessTokenRepository extends AbstractRepository implements AccessTokenRep
            'identifier' => intval($accessTokenEntity->getIdentifier())
         ]);
 
+        $this->logger->debug('Trying to persist new access token. Token does {not}exist.',
+            [
+                'not'  => $out === null ? 'not ' : ''
+            ]
+        );
         if ($out !== null) {
             throw new UniqueTokenIdentifierConstraintViolationException(
                 'AccessToken already exist.', 1, 'Unique constraint failed.'
@@ -61,8 +75,11 @@ class AccessTokenRepository extends AbstractRepository implements AccessTokenRep
         ]);
 
         if (!$out) {
+            $this->logger->warning('Tried to revoke an access token which did not exist.');
             return;
         }
+
+        $this->logger->debug('Revoking access token.');
 
         $this->em->remove($out);
     }

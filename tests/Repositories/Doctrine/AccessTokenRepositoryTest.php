@@ -9,6 +9,7 @@ namespace Jitesoft\OAuth\Lumen\Tests\Repositories\Doctrine;
 use Carbon\Carbon;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Jitesoft\Log\NullLogger;
 use Jitesoft\OAuth\Lumen\Entities\AccessToken;
 use Jitesoft\OAuth\Lumen\Entities\Client;
 use Jitesoft\OAuth\Lumen\Repositories\Doctrine\AccessTokenRepository;
@@ -28,7 +29,7 @@ class AccessTokenRepositoryTest extends TestCase {
     protected function setUp() {
         parent::setUp();
         $this->entityManagerMock = Mockery::mock(EntityManagerInterface::class);
-        $this->repository        = new AccessTokenRepository($this->entityManagerMock);
+        $this->repository        = new AccessTokenRepository($this->entityManagerMock, new NullLogger());
     }
 
     public function testGetNewToken() {

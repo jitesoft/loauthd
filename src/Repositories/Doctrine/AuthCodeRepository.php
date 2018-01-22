@@ -10,7 +10,7 @@ use League\OAuth2\Server\Entities\AuthCodeEntityInterface as AuthCode;
 use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
 
-class AuthCodeRepository implements AuthCodeRepositoryInterface {
+class AuthCodeRepository extends AbstractRepository implements AuthCodeRepositoryInterface {
 
     /**
      * Creates a new AuthCode
