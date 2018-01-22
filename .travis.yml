@@ -1,0 +1,25 @@
+language: php
+
+php:
+  - 7.1
+  - 7.2
+  - nightly
+
+before_script:
+  - composer self-update
+  - composer install --prefer-source
+
+script:
+  - composer test
+  - ./vendor/bin/phpcs -p ./src --report=summary --standard=./style.xml
+notifications:
+  - on_success: never
+  - on_failure: always
+git:
+  depth: 1
+matrix:
+  allow_failures:
+    - php: nightly
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)

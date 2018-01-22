@@ -1,6 +1,6 @@
 {
-    "name": "jitesoft/lumen-doctrine-oauth2",
-    "description": "Package for OAuth2 in Laravel Lumen using Doctrine DBAL/ORM.",
+    "name": "jitesoft/loauthd2",
+    "description": "OAuth2 bridge for Lumen using doctrine dbal/orm.",
     "require": {
         "ext-openssl": ">=7.1",
         "php": ">=7.1",
@@ -17,9 +17,11 @@
         "phpunit/phpunit": "^6.5",
         "mikey179/vfsStream": "^1.6",
         "squizlabs/php_codesniffer": "^3.2",
-        "laravel/lumen-framework": "^5.5",
         "mockery/mockery": "^1.0",
         "php-mock/php-mock": "^2.0"
+    },
+    "suggest": {
+        "laravel/lumen-framework": "^5.5"
     },
     "license": "MIT",
     "authors": [

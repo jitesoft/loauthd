@@ -1,0 +1,30 @@
+
+before_script:
+  - docker pull jitesoft/phpunit:${PHP_VERSION}
+  - composer install --no-interaction --prefer-source
+
+test: php 7.2:
+  variables:
+    - PHP_VERSION=7.2
+  stage: test
+  cache:
+    key: "loathd-2-php72:cache"
+    paths:
+      - vendor/
+  image: jitesoft/phpunit:${PHP_VERSION}
+  script:
+    - composer test
+    - vendor/bin/phpcs -p --report=summary --standard=style.xml src
+
+test: php 7.1:
+  variables:
+    - PHP_VERSION=7.1
+  stage: test
+  cache:
+    key: "loathd-2-php71:cache"
+    paths:
+      - vendor/
+  image: jitesoft/phpunit:${PHP_VERSION}
+  script:
+    - composer test
+    - vendor/bin/phpcs -p --report=summary --standard=style.xml src

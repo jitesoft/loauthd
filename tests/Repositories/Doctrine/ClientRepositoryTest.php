@@ -11,8 +11,12 @@ use PHPUnit\Framework\TestCase;
 
 class ClientRepositoryTest extends TestCase {
 
-    public function testGetClientEntity() {}
+    public function testGetClientEntity() {
 
-    public function testGetClientEntitySecretValidation() {}
+    }
+
+    public function testGetClientEntitySecretValidation() {
+
+    }
 
 }
