@@ -21,7 +21,11 @@ class Scope implements ScopeEntityInterface {
     use IdTrait;
     use IdentifierTrait;
 
+    /**
+     * @param string $identifier
+     */
     public function __construct(string $identifier) {
+        $this->identifier = $identifier;
     }
 
     /**
@@ -34,4 +38,5 @@ class Scope implements ScopeEntityInterface {
     public function jsonSerialize() {
         return json_encode($this->identifier);
     }
+
 }

@@ -14,7 +14,6 @@ use League\OAuth2\Server\Entities\ScopeEntityInterface;
 
 trait TokenTrait {
 
-
     /**
      * @var Carbon
      * @ORM\Column(type="datetime", name="expiry", nullable=false)
@@ -108,4 +107,5 @@ trait TokenTrait {
     public function setClient(ClientEntityInterface $client) {
         $this->client = $client;
     }
+
 }

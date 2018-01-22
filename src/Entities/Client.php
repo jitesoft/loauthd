@@ -57,6 +57,10 @@ class Client implements ClientEntityInterface {
      */
     protected $authCodes;
 
+    /**
+     * @param string $name
+     * @param string $redirectUrl
+     */
     public function __construct(string $name, string $redirectUrl) {
         $this->name        = $name;
         $this->redirectUrl = $redirectUrl;
@@ -78,4 +82,5 @@ class Client implements ClientEntityInterface {
     public function getRedirectUri() {
         return $this->redirectUrl;
     }
+
 }

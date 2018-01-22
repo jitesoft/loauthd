@@ -19,7 +19,11 @@ use League\OAuth2\Server\Entities\UserEntityInterface;
 class User implements UserEntityInterface {
     use IdentifierTrait;
 
+    /**
+     * @param string $identifier
+     */
     public function __construct(string $identifier) {
         $this->identifier = $identifier;
     }
+
 }

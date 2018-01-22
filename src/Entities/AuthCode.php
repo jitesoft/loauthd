@@ -62,4 +62,5 @@ class AuthCode implements AuthCodeEntityInterface {
     public function setRedirectUri($uri) {
         $this->redirectUri = $uri;
     }
+
 }

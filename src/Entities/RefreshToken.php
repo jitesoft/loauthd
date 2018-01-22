@@ -1,11 +1,9 @@
 <?php
-
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   RefreshToken.php - Part of the lumen-doctrine-oauth2 project.
 
   © - Jitesoft 2018
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
 namespace Jitesoft\OAuth\Lumen\Entities;
 
 use Carbon\Carbon;
@@ -51,8 +49,6 @@ class RefreshToken {
     }
 
     /**
-     * Get the token's expiry date time.
-     *
      * @return \DateTime
      */
     public function getExpiryDateTime() {
@@ -60,8 +56,6 @@ class RefreshToken {
     }
 
     /**
-     * Set the date time when the token expires.
-     *
      * @param \DateTime $dateTime
      */
     public function setExpiryDateTime(\DateTime $dateTime) {

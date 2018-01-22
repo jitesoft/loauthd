@@ -1,11 +1,9 @@
 <?php
-
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   AccessToken.php - Part of the lumen-doctrine-oauth2 project.
 
   © - Jitesoft 2018
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
 namespace Jitesoft\OAuth\Lumen\Entities;
 
 use Carbon\Carbon;
@@ -55,7 +53,6 @@ class AccessToken implements AccessTokenEntityInterface {
     protected $scopes;
 
     /**
-     * AccessToken constructor.
      * @param ClientEntityInterface $client
      * @param array $scopes
      * @param null $userIdentifier
