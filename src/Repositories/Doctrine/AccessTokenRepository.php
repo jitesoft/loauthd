@@ -12,7 +12,7 @@ use League\OAuth2\Server\Entities\ScopeEntityInterface;
 use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
 
-class AccessTokenRepository implements AccessTokenRepositoryInterface {
+class AccessTokenRepository extends AbstractRepository implements AccessTokenRepositoryInterface {
 
     /**
      * Create a new access token
@@ -35,6 +35,8 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface {
      * @throws UniqueTokenIdentifierConstraintViolationException
      */
     public function persistNewAccessToken(Token $accessTokenEntity) {
+
+
         // TODO: Implement persistNewAccessToken() method.
     }
 
@@ -44,6 +46,8 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface {
      * @param string $tokenId
      */
     public function revokeAccessToken($tokenId) {
+       $this->em->remove()
+
         // TODO: Implement revokeAccessToken() method.
     }
 
@@ -54,7 +58,7 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface {
      *
      * @return bool Return true if this token has been revoked
      */
-    public function isAccessTokenRevoked($tokenId) {
+    public function isAccessTokenRevoked($tokenId): bool {
         // TODO: Implement isAccessTokenRevoked() method.
     }
 }
