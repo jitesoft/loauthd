@@ -18,7 +18,6 @@ class OAuthServiceProvider extends ServiceProvider {
         /** @var Application $app */
         $app = $this->app;
 
-
         if (config('oauth2', null) === null) {
             $app->configure('oauth2');
         }

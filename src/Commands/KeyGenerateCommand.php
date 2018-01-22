@@ -12,10 +12,9 @@ use phpseclib\Crypt\RSA;
 
 class KeyGenerateCommand extends Command {
 
-    // Todo: Add the possibility to set the path to the keys from command.
     protected $signature = "oauth:key:gen";
 
-    protected $description = "Generates the public and private keys used by oAuth.";
+    protected $description = "Generates the public and private keys used by OAuth.";
 
     public function handle() {
         $this->info('Generating OAuth public and private keys.');

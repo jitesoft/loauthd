@@ -8,7 +8,10 @@
         "jitesoft/exceptions": "^2.0",
         "laravel-doctrine/orm": "^1.4",
         "jitesoft/loggers": "^1.0",
-        "phpseclib/phpseclib": "^2.0"
+        "phpseclib/phpseclib": "^2.0",
+        "illuminate/support": "^5.5",
+        "illuminate/container": "^5.5",
+        "illuminate/config": "^5.5"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.5",
