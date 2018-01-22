@@ -1,0 +1,41 @@
+{
+    "name": "jitesoft/lumen-doctrine-oauth2",
+    "description": "Package for OAuth2 in Laravel Lumen using Doctrine DBAL/ORM.",
+    "require": {
+        "ext-openssl": ">=7.1",
+        "php": ">=7.1",
+        "league/oauth2-server": "^6.1",
+        "jitesoft/exceptions": "^2.0",
+        "laravel-doctrine/orm": "^1.4",
+        "jitesoft/loggers": "^1.0",
+        "phpseclib/phpseclib": "^2.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.5",
+        "mikey179/vfsStream": "^1.6",
+        "squizlabs/php_codesniffer": "^3.2",
+        "laravel/lumen-framework": "^5.5",
+        "mockery/mockery": "^1.0",
+        "php-mock/php-mock": "^2.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Johannes Tegnér",
+            "email": "johannes@jitesoft.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Jitesoft\\OAuth\\Lumen\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Jitesoft\\OAuth\\Lumen\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit --configuration=phpunit.xml"
+    }
+}
