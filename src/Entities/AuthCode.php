@@ -6,113 +6,60 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 namespace Jitesoft\OAuth\Lumen\Entities;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use Jitesoft\OAuth\Lumen\Entities\Traits\IdentifierTrait;
+use Jitesoft\OAuth\Lumen\Entities\Traits\TokenTrait;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
-use League\OAuth2\Server\Entities\ScopeEntityInterface;
 
+/**
+ * Class AuthCode
+ *
+ * @ORM\Entity
+ * @ORM\Table(name="oauth2/auth_codes")
+ */
 class AuthCode implements AuthCodeEntityInterface {
+    use TokenTrait;
+    use IdentifierTrait;
+
+    /**
+     * @var Collection|array|Scope[]
+     */
+    protected $scopes;
+
+
+    /**
+     * @var ClientEntityInterface
+     * @ORM\OneToMany(
+     *     targetEntity="Client",
+     *     mappedBy="authCodes"
+     * )
+     */
+    protected $client;
+
+    /**
+     * @var null|string
+     * @ORM\Column(type="text", name="redirect_uri", nullable=true)
+     */
+    protected $redirectUri;
+
+    public function __construct() {
+        $this->scopes = new ArrayCollection();
+    }
 
     /**
      * @return string
      */
     public function getRedirectUri() {
-        // TODO: Implement getRedirectUri() method.
+        return $this->redirectUri;
     }
 
     /**
      * @param string $uri
      */
     public function setRedirectUri($uri) {
-        // TODO: Implement setRedirectUri() method.
-    }
-
-    /**
-     * Get the token's identifier.
-     *
-     * @return string
-     */
-    public function getIdentifier() {
-        // TODO: Implement getIdentifier() method.
-    }
-
-    /**
-     * Set the token's identifier.
-     *
-     * @param $identifier
-     */
-    public function setIdentifier($identifier) {
-        // TODO: Implement setIdentifier() method.
-    }
-
-    /**
-     * Get the token's expiry date time.
-     *
-     * @return \DateTime
-     */
-    public function getExpiryDateTime() {
-        // TODO: Implement getExpiryDateTime() method.
-    }
-
-    /**
-     * Set the date time when the token expires.
-     *
-     * @param \DateTime $dateTime
-     */
-    public function setExpiryDateTime(\DateTime $dateTime) {
-        // TODO: Implement setExpiryDateTime() method.
-    }
-
-    /**
-     * Set the identifier of the user associated with the token.
-     *
-     * @param string|int $identifier The identifier of the user
-     */
-    public function setUserIdentifier($identifier) {
-        // TODO: Implement setUserIdentifier() method.
-    }
-
-    /**
-     * Get the token user's identifier.
-     *
-     * @return string|int
-     */
-    public function getUserIdentifier() {
-        // TODO: Implement getUserIdentifier() method.
-    }
-
-    /**
-     * Get the client that the token was issued to.
-     *
-     * @return ClientEntityInterface
-     */
-    public function getClient() {
-        // TODO: Implement getClient() method.
-    }
-
-    /**
-     * Set the client that the token was issued to.
-     *
-     * @param ClientEntityInterface $client
-     */
-    public function setClient(ClientEntityInterface $client) {
-        // TODO: Implement setClient() method.
-    }
-
-    /**
-     * Associate a scope with the token.
-     *
-     * @param ScopeEntityInterface $scope
-     */
-    public function addScope(ScopeEntityInterface $scope) {
-        // TODO: Implement addScope() method.
-    }
-
-    /**
-     * Return an array of scopes associated with the token.
-     *
-     * @return ScopeEntityInterface[]
-     */
-    public function getScopes() {
-        // TODO: Implement getScopes() method.
+        $this->redirectUri = $uri;
     }
 }

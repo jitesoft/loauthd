@@ -6,7 +6,8 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 namespace Jitesoft\OAuth\Lumen\Repositories\Doctrine;
 
-use League\OAuth2\Server\Entities\AuthCodeEntityInterface as AuthCode;
+use Jitesoft\OAuth\Lumen\Entities\AuthCode;
+use League\OAuth2\Server\Entities\AuthCodeEntityInterface as AuthCodeInterface;
 use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
 
@@ -15,20 +16,20 @@ class AuthCodeRepository extends AbstractRepository implements AuthCodeRepositor
     /**
      * Creates a new AuthCode
      *
-     * @return AuthCode
+     * @return AuthCodeInterface
      */
-    public function getNewAuthCode(): AuthCode {
-        // TODO: Implement getNewAuthCode() method.
+    public function getNewAuthCode(): AuthCodeInterface {
+        return new AuthCode();
     }
 
     /**
      * Persists a new auth code to permanent storage.
      *
-     * @param AuthCode $authCodeEntity
+     * @param AuthCodeInterface $authCodeEntity
      *
      * @throws UniqueTokenIdentifierConstraintViolationException
      */
-    public function persistNewAuthCode(AuthCode $authCodeEntity) {
+    public function persistNewAuthCode(AuthCodeInterface $authCodeEntity) {
         // TODO: Implement persistNewAuthCode() method.
     }
 

@@ -10,48 +10,47 @@ namespace Jitesoft\OAuth\Lumen\Entities;
 
 use Carbon\Carbon;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Jitesoft\OAuth\Lumen\Entities\Traits\IdentifierTrait;
+use Jitesoft\OAuth\Lumen\Entities\Traits\IdTrait;
+use Jitesoft\OAuth\Lumen\Entities\Traits\TokenTrait;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
-use League\OAuth2\Server\Entities\ScopeEntityInterface;
+use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
 use League\OAuth2\Server\Entities\Traits\AccessTokenTrait;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="oauth_access_tokens")
+ * @ORM\Table(name="oauth2/access_tokens")
  */
 class AccessToken implements AccessTokenEntityInterface {
     use AccessTokenTrait;
+    use TokenTrait;
+    use IdentifierTrait;
+    use IdTrait;
 
     /**
-     * @var int
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(type="integer", name="identifier")
+     * @var RefreshTokenEntityInterface[]|Collection
+     * @ORM\OneToMany(
+     *     targetEntity="RefreshToken",
+     *     mappedBy="accessToken",
+     *     orphanRemoval=true
+     * )
      */
-    protected $identifier;
-
-    /**
-     * @var Carbon
-     * @ORM\Column(type="datetime", name="expiry", nullable=false)
-     */
-    protected $expiry;
-
-    /**
-     * @var string
-     * @ORM\Column(type="string", name="user_identifier", nullable=true)
-     */
-    protected $userIdentifier;
+    protected $refreshTokens;
 
     /**
      * @var ClientEntityInterface
-    // MAP!
+     * @ORM\OneToMany(
+     *     targetEntity="Client",
+     *     mappedBy="accessTokens"
+     * )
      */
     protected $client;
 
     /**
-     * @var array|ScopeEntityInterface
-     * // MAP!
+     * @var ArrayCollection|Scope[]|array
      */
     protected $scopes;
 
@@ -74,89 +73,4 @@ class AccessToken implements AccessTokenEntityInterface {
         $this->scopes = new ArrayCollection($scopes);
     }
 
-    /**
-     * @return ClientEntityInterface
-     */
-    public function getClient(): ClientEntityInterface {
-        return $this->client;
-    }
-
-    /**
-     * @return \DateTime|Carbon
-     */
-    public function getExpiryDateTime(): Carbon {
-        return $this->expiry;
-    }
-
-    /**
-     * @return string|int
-     */
-    public function getUserIdentifier(): ?string {
-        return $this->userIdentifier;
-    }
-
-    /**
-     * @return ScopeEntityInterface[]|array
-     */
-    public function getScopes(): array {
-        return $this->scopes->toArray();
-    }
-
-    /**
-     * Set the date time when the token expires.
-     *
-     * @param \DateTime $dateTime
-     */
-    public function setExpiryDateTime(\DateTime $dateTime) {
-        $this->expiry = Carbon::instance($dateTime);
-    }
-
-    /**
-     * Set the identifier of the user associated with the token.
-     *
-     * @param string|int $identifier The identifier of the user
-     */
-    public function setUserIdentifier($identifier) {
-        $this->userIdentifier = $identifier;
-    }
-
-    /**
-     * Set the client that the token was issued to.
-     *
-     * @param ClientEntityInterface $client
-     */
-    public function setClient(ClientEntityInterface $client) {
-        $this->client = $client;
-    }
-
-    /**
-     * Associate a scope with the token.
-     *
-     * @param ScopeEntityInterface $scope
-     */
-    public function addScope(ScopeEntityInterface $scope) {
-        $this->scopes->add($scope);
-    }
-
-    /**
-     * Get the token's identifier.
-     *
-     * @return string
-     */
-    public function getIdentifier(): string {
-        return (string)$this->identifier;
-    }
-
-    /**
-     * Set the token's identifier.
-     *
-     * @param string|int $identifier
-     */
-    public function setIdentifier($identifier) {
-        if (is_string($identifier)) {
-            $identifier = intval($identifier);
-        }
-
-        $this->identifier = $identifier;
-    }
 }

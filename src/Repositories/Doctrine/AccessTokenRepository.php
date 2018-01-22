@@ -57,7 +57,7 @@ class AccessTokenRepository extends AbstractRepository implements AccessTokenRep
         );
         if ($out !== null) {
             throw new UniqueTokenIdentifierConstraintViolationException(
-                'AccessToken already exist.', 1, 'Unique constraint failed.'
+                'AccessToken already exist.', 0, 'Unique constraint failed.'
             );
         }
 
@@ -71,7 +71,7 @@ class AccessTokenRepository extends AbstractRepository implements AccessTokenRep
      */
     public function revokeAccessToken($tokenId) {
         $out = $this->em->getRepository(AccessToken::class)->findOneBy([
-            'identifier' => intval($tokenId)
+            'identifier' => $tokenId
         ]);
 
         if (!$out) {
@@ -93,7 +93,7 @@ class AccessTokenRepository extends AbstractRepository implements AccessTokenRep
      */
     public function isAccessTokenRevoked($tokenId): bool {
         $out = $this->em->getRepository(AccessToken::class)->findOneBy([
-            'identifier' => intval($tokenId)
+            'identifier' => $tokenId
         ]);
 
         return $out === null;

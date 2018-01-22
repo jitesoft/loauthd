@@ -6,36 +6,76 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 namespace Jitesoft\OAuth\Lumen\Entities;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use Jitesoft\OAuth\Lumen\Entities\Traits\IdentifierTrait;
+use Jitesoft\OAuth\Lumen\Entities\Traits\IdTrait;
+use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
+use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 
+/**
+ * Class Client
+ *
+ * @ORM\Entity
+ * @ORM\Table(name="oauth2/clients")
+ */
 class Client implements ClientEntityInterface {
+    use IdentifierTrait;
+    use IdTrait;
 
     /**
-     * Get the client's identifier.
-     *
-     * @return string
+     * @var string
+     * @ORM\Column(type="string", name="name", nullable=false, unique=true)
      */
-    public function getIdentifier() {
-        // TODO: Implement getIdentifier() method.
+    protected $name;
+
+    /**
+     * @var string
+     * @ORM\Column(type="text", name="redirect_url", nullable=false)
+     */
+    protected $redirectUrl;
+
+    /**
+     * @var Collection|AccessTokenEntityInterface[]|array
+     * @ORM\OneToMany(
+     *     targetEntity="AccessToken",
+     *     mappedBy="client",
+     *     orphanRemoval=true
+     * )
+     */
+    protected $accessTokens;
+
+    /**
+     * @var Collection|AuthCodeEntityInterface[]|array
+     * @ORM\OneToMany(
+     *     targetEntity="AuthCode",
+     *     mappedBy="client",
+     *     orphanRemoval=true
+     * )
+     */
+    protected $authCodes;
+
+    public function __construct(string $name, string $redirectUrl) {
+        $this->name        = $name;
+        $this->redirectUrl = $redirectUrl;
+
+        $this->accessTokens = new ArrayCollection();
+        $this->authCodes    = new ArrayCollection();
     }
 
     /**
-     * Get the client's name.
-     *
      * @return string
      */
-    public function getName() {
-        // TODO: Implement getName() method.
+    public function getName(): string {
+        return $this->name;
     }
 
     /**
-     * Returns the registered redirect URI (as a string).
-     *
-     * Alternatively return an indexed array of redirect URIs.
-     *
-     * @return string|string[]
+     * @return string
      */
     public function getRedirectUri() {
-        // TODO: Implement getRedirectUri() method.
+        return $this->redirectUrl;
     }
 }
