@@ -6,6 +6,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 namespace Jitesoft\OAuth\Lumen\Tests\Repositories\Doctrine;
 
+use Carbon\Carbon;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Jitesoft\OAuth\Lumen\Entities\AccessToken;
@@ -42,62 +43,82 @@ class AccessTokenRepositoryTest extends TestCase {
     }
 
     public function testPersistNewAccessToken() {
-        $token = new AccessToken();
-        $token->setIdentifier('abc');
+        $token = new AccessToken(new Client(), [], Carbon::now());
+        $token->setIdentifier(1);
 
         $this->entityManagerMock->shouldReceive('getRepository')->once()->with(get_class($token))->andReturn(
-            Mockery::mock(ObjectRepository::class)->shouldReceive('findBy')->once()->with([
-                'identifier' => 'abc'
-            ])->andReturn(null)
+            Mockery::mock(ObjectRepository::class)->shouldReceive('findOneBy')->once()->with([
+                'identifier' => 1
+            ])->andReturn(null)->getMock()
         );
+
         $this->entityManagerMock->shouldReceive('persist')->once()->with(
             $token
         );
         $this->repository->persistNewAccessToken($token);
+
+        $this->entityManagerMock->mockery_verify();
         $this->assertTrue(true);
     }
 
     public function testPersistNewAccessTokenExists() {
-        $token = new AccessToken();
-        $token->setIdentifier('abc');
+        $token = new AccessToken(new Client(), [], Carbon::now());
+        $token->setIdentifier(1);
 
         $this->entityManagerMock->shouldReceive('getRepository')->once()->with(get_class($token))->andReturn(
-            Mockery::mock(ObjectRepository::class)->shouldReceive('findBy')->once()->with([
-                'identifier' => 'abc'
-            ])->andReturn($token)
+            Mockery::mock(ObjectRepository::class)->shouldReceive('findOneBy')->once()->with([
+                'identifier' => 1
+            ])->andReturn($token)->getMock()
         );
 
-        $this->expectException(UniqueTokenIdentifierConstraintViolationException::class);
-        $this->repository->persistNewAccessToken(new AccessToken());
-        $this->assertTrue(true);
+        try {
+            $this->repository->persistNewAccessToken($token);
+        } catch (UniqueTokenIdentifierConstraintViolationException $ex) {
+            // Should happen.
+            $this->assertTrue(true);
+        }
+
+        $this->entityManagerMock->mockery_verify();
     }
 
     public function testRevokeAccessToken() {
-        $token = new AccessToken();
-        $token->setIdentifier('abc');
+        $token = new AccessToken(new Client(), [], Carbon::now());
+        $token->setIdentifier(1);
 
-        $this->entityManagerMock->shouldReceive('remove')->once()->with('abc');
+        $this->entityManagerMock->shouldReceive('getRepository')->once()->with(get_class($token))->andReturn(
+            Mockery::mock(ObjectRepository::class)->shouldReceive('findOneBy')->once()->with([
+                'identifier' => 1
+            ])->andReturn($token)->getMock()
+        );
+
+        $this->entityManagerMock->shouldReceive('remove')->once()->with($token);
         $this->repository->revokeAccessToken($token->getIdentifier());
 
+        $this->entityManagerMock->mockery_verify();
         $this->assertTrue(true);
     }
 
     public function testIsAccessTokenRevoked() {
-        $this->entityManagerMock->shouldReceive('getRepository')->once()->with(get_class($token))->andReturn(
-            Mockery::mock(ObjectRepository::class)->shouldReceive('findBy')->once()->with([
-                'identifier' => 'abc'
-            ])->andReturn(null)
-        );
-
-        $this->assertTrue($this->repository->isAccessTokenRevoked('abc'));
+        $token = new AccessToken(new Client(), [], Carbon::now());
+        $token->setIdentifier(1);
 
         $this->entityManagerMock->shouldReceive('getRepository')->once()->with(get_class($token))->andReturn(
-            Mockery::mock(ObjectRepository::class)->shouldReceive('findBy')->once()->with([
-                'identifier' => 'abc'
-            ])->andReturn(new AccessToken())
+            Mockery::mock(ObjectRepository::class)->shouldReceive('findOneBy')->once()->with([
+                'identifier' => 1
+            ])->andReturn(null)->getMock()
         );
 
-        $this->assertFalse($this->repository->isAccessTokenRevoked('abc'));
+        $this->assertTrue($this->repository->isAccessTokenRevoked('1'));
+
+        $this->entityManagerMock->shouldReceive('getRepository')->once()->with(get_class($token))->andReturn(
+            Mockery::mock(ObjectRepository::class)->shouldReceive('findOneBy')->once()->with([
+                'identifier' => 1
+            ])->andReturn(new AccessToken(new Client(), [], Carbon::now()))->getMock()
+        );
+
+        $this->assertFalse($this->repository->isAccessTokenRevoked('1'));
+
+        $this->entityManagerMock->mockery_verify();
     }
 
 }

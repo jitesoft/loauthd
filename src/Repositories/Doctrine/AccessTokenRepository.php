@@ -6,6 +6,8 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 namespace Jitesoft\OAuth\Lumen\Repositories\Doctrine;
 
+use Carbon\Carbon;
+use Jitesoft\OAuth\Lumen\Entities\AccessToken;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface as Token;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
@@ -24,7 +26,7 @@ class AccessTokenRepository extends AbstractRepository implements AccessTokenRep
      * @return Token
      */
     public function getNewToken(ClientEntityInterface $clientEntity, array $scopes, $userIdentifier = null): Token {
-        // TODO: Implement getNewToken() method.
+        return new AccessToken($clientEntity, $scopes, Carbon::now()->addHour(1), $userIdentifier);
     }
 
     /**
@@ -35,9 +37,17 @@ class AccessTokenRepository extends AbstractRepository implements AccessTokenRep
      * @throws UniqueTokenIdentifierConstraintViolationException
      */
     public function persistNewAccessToken(Token $accessTokenEntity) {
+        $out = $this->em->getRepository(AccessToken::class)->findOneBy([
+           'identifier' => intval($accessTokenEntity->getIdentifier())
+        ]);
 
+        if ($out !== null) {
+            throw new UniqueTokenIdentifierConstraintViolationException(
+                'AccessToken already exist.', 1, 'Unique constraint failed.'
+            );
+        }
 
-        // TODO: Implement persistNewAccessToken() method.
+        $this->em->persist($accessTokenEntity);
     }
 
     /**
@@ -46,9 +56,15 @@ class AccessTokenRepository extends AbstractRepository implements AccessTokenRep
      * @param string $tokenId
      */
     public function revokeAccessToken($tokenId) {
-       $this->em->remove()
+        $out = $this->em->getRepository(AccessToken::class)->findOneBy([
+            'identifier' => intval($tokenId)
+        ]);
 
-        // TODO: Implement revokeAccessToken() method.
+        if (!$out) {
+            return;
+        }
+
+        $this->em->remove($out);
     }
 
     /**
@@ -59,6 +75,10 @@ class AccessTokenRepository extends AbstractRepository implements AccessTokenRep
      * @return bool Return true if this token has been revoked
      */
     public function isAccessTokenRevoked($tokenId): bool {
-        // TODO: Implement isAccessTokenRevoked() method.
+        $out = $this->em->getRepository(AccessToken::class)->findOneBy([
+            'identifier' => intval($tokenId)
+        ]);
+
+        return $out === null;
     }
 }
