@@ -8,7 +8,10 @@ namespace Jitesoft\OAuth\Lumen\Entities;
 
 use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
+use Jitesoft\OAuth\Lumen\Entities\Traits\IdentifierTrait;
+use Jitesoft\OAuth\Lumen\Entities\Traits\IdTrait;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
+use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
 
 /**
  * Class RefreshToken
@@ -16,7 +19,9 @@ use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
  * @ORM\Entity
  * @ORM\Table(name="oauth2/refresh_tokens")
  */
-class RefreshToken {
+class RefreshToken implements RefreshTokenEntityInterface {
+    use IdentifierTrait;
+    use IdTrait;
 
     /**
      * @var AccessTokenEntityInterface

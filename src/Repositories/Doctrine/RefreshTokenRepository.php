@@ -10,7 +10,7 @@ use League\OAuth2\Server\Entities\RefreshTokenEntityInterface as Token;
 use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
 
-class RefreshTokenRepository implements RefreshTokenRepositoryInterface {
+class RefreshTokenRepository extends AbstractRepository implements RefreshTokenRepositoryInterface {
 
     /**
      * Creates a new refresh token
