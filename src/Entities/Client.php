@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Jitesoft\OAuth\Lumen\Entities\Traits\IdentifierTrait;
 use Jitesoft\OAuth\Lumen\Entities\Traits\IdTrait;
+use Jitesoft\OAuth\Lumen\OAuth;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
@@ -58,15 +59,84 @@ class Client implements ClientEntityInterface {
     protected $authCodes;
 
     /**
+     * @var string
+     * @ORM\Column(type="string", name="secret", length=255, nullable=true)
+     */
+    protected $secret;
+
+    /**
+     * @var int
+     * @ORM\Column(type="smallint", name="grants")
+     */
+    protected $grants;
+
+    /**
      * @param string $name
      * @param string $redirectUrl
+     * @param null|string $secret
+     * @param int $grants
      */
-    public function __construct(string $name, string $redirectUrl) {
+    public function __construct(string $name,
+                                string $redirectUrl,
+                                ?string $secret = null,
+                                $grants = 0) {
+
         $this->name        = $name;
         $this->redirectUrl = $redirectUrl;
+        $this->secret      = $secret;
+
+        $this->setGrants($grants);
 
         $this->accessTokens = new ArrayCollection();
         $this->authCodes    = new ArrayCollection();
+    }
+
+    public function firstParty() {
+        return $this->hasGrant(Oauth::GRANT_TYPE_PASSWORD);
+    }
+
+    /**
+     * @param int $grants
+     * @see OAuth::GRANT_TYPE_*
+     */
+    public function addGrants(int $grants) {
+        $this->grants |= $grants;
+    }
+
+    /**
+     * @param int $grants
+     * @see OAuth::GRANT_TYPE_*
+     */
+    public function removeGrants(int $grants) {
+        $this->grants &= ~$grants;
+    }
+
+    public function setGrants(int $grants) {
+        $this->grants = $grants;
+    }
+
+    /**
+     * @param int $grant
+     * @return bool
+     * @see OAuth::GRANT_TYPE_*
+     */
+    public function hasGrant(int $grant): bool {
+        return (($this->grants & $grant) === $grant);
+    }
+
+    /**
+     * @param string $secret
+     * @return bool
+     */
+    public function validateSecret(string $secret): bool {
+        return $this->secret === $secret;
+    }
+
+    /**
+     * @param string $secret
+     */
+    public function setSecret(string $secret) {
+        $this->secret = $secret;
     }
 
     /**

@@ -7,7 +7,7 @@
 namespace Jitesoft\OAuth\Lumen\Tests\Repositories\Doctrine;
 
 use Jitesoft\OAuth\Lumen\Repositories\Doctrine\ScopeRepository;
-use PHPUnit\Framework\TestCase;
+use Jitesoft\OAuth\Lumen\Tests\TestCase;
 
 class ScopeRepositoryTest extends TestCase {
 

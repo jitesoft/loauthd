@@ -7,29 +7,24 @@
 namespace Jitesoft\OAuth\Lumen\Tests\Repositories\Doctrine;
 
 use Doctrine\Common\Persistence\ObjectRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Jitesoft\Log\NullLogger;
 use Jitesoft\OAuth\Lumen\Entities\AuthCode;
 use Jitesoft\OAuth\Lumen\Repositories\Doctrine\AuthCodeRepository;
+use Jitesoft\OAuth\Lumen\Tests\TestCase;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
 use Mockery;
-use PHPUnit\Framework\TestCase;
 
 class AuthCodeRepositoryTest extends TestCase {
 
     /** @var AuthCodeRepositoryInterface */
     protected $repository;
 
-    /** @var EntityManagerInterface|Mockery\Mock */
-    protected $entityManagerMock;
-
     protected function setUp() {
         parent::setUp();
 
-        $this->entityManagerMock = Mockery::mock(EntityManagerInterface::class);
-        $this->repository        = new AuthCodeRepository($this->entityManagerMock, new NullLogger());
+        $this->repository = new AuthCodeRepository($this->entityManagerMock, new NullLogger());
     }
 
     public function testGetNewAuthCode() {

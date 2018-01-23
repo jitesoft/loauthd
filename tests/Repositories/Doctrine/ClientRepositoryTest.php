@@ -6,17 +6,142 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 namespace Jitesoft\OAuth\Lumen\Tests\Repositories\Doctrine;
 
+use Doctrine\Common\Persistence\ObjectRepository;
+use Jitesoft\Exceptions\Database\Entity\EntityException;
+use Jitesoft\Log\StdLogger;
+use Jitesoft\OAuth\Lumen\Entities\Client;
+use Jitesoft\OAuth\Lumen\OAuth;
 use Jitesoft\OAuth\Lumen\Repositories\Doctrine\ClientRepository;
-use PHPUnit\Framework\TestCase;
+use Jitesoft\OAuth\Lumen\Tests\TestCase;
+use League\OAuth2\Server\Entities\ClientEntityInterface;
+use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
+use Mockery;
 
 class ClientRepositoryTest extends TestCase {
 
-    public function testGetClientEntity() {
+    /** @var ClientRepositoryInterface */
+    protected $repository;
 
+    protected function setUp() {
+        parent::setUp();
+
+        $this->repository = new ClientRepository($this->entityManagerMock, new StdLogger());
+    }
+
+    public function testGetClientEntity() {
+        $client = new Client('test', 'example.com', null, OAuth::GRANT_TYPE_PASSWORD);
+        $client->setIdentifier('test');
+
+        $this->entityManagerMock
+            ->shouldReceive('getRepository')
+            ->once()
+            ->with(Client::class)
+            ->andReturn(
+                Mockery::mock(ObjectRepository::class)
+                    ->shouldReceive('findOneBy')
+                    ->once()
+                    ->with(['identifier' => 'test'])
+                    ->andReturn($client)
+                    ->getMock()
+            );
+
+
+        $entity = $this->repository->getClientEntity('test', 'password', null, false);
+        $this->entityManagerMock->mockery_verify();
+        $this->assertInstanceOf(ClientEntityInterface::class, $entity);
+        $this->assertSame($client, $entity);
+    }
+
+    public function testGetClientEntityNull() {
+
+        $this->entityManagerMock
+            ->shouldReceive('getRepository')
+            ->once()
+            ->with(Client::class)
+            ->andReturn(
+                Mockery::mock(ObjectRepository::class)
+                    ->shouldReceive('findOneBy')
+                    ->once()
+                    ->with(['identifier' => 'test'])
+                    ->andReturn(null)
+                    ->getMock()
+            );
+
+        $out = $this->repository->getClientEntity('test', 'password');
+        $this->assertNull($out);
+        $this->entityManagerMock->mockery_verify();
     }
 
     public function testGetClientEntitySecretValidation() {
+        $client = new Client('test', 'example.com', 'secret', OAuth::GRANT_TYPE_PASSWORD);
 
+        $this->entityManagerMock
+            ->shouldReceive('getRepository')
+            ->once()
+            ->with(Client::class)
+            ->andReturn(
+                Mockery::mock(ObjectRepository::class)
+                    ->shouldReceive('findOneBy')
+                    ->once()
+                    ->with(['identifier' => 'test'])
+                    ->andReturn($client)
+                    ->getMock()
+            );
+
+        $entity = $this->repository->getClientEntity('test', 'password', 'secret', true);
+        $this->entityManagerMock->mockery_verify();
+        $this->assertInstanceOf(ClientEntityInterface::class, $entity);
+        $this->assertSame($client, $entity);
+    }
+
+    public function testGetClientEntitySecretValidationFailure() {
+        $client = new Client('test', 'example.com', '!secret', OAuth::GRANT_TYPE_PASSWORD);
+
+        $this->entityManagerMock
+            ->shouldReceive('getRepository')
+            ->once()
+            ->with(Client::class)
+            ->andReturn(
+                Mockery::mock(ObjectRepository::class)
+                    ->shouldReceive('findOneBy')
+                    ->once()
+                    ->with(['identifier' => 'test'])
+                    ->andReturn($client)
+                    ->getMock()
+            );
+
+        try {
+            $this->repository->getClientEntity('test', 'password', 'secret', true);
+        } catch (EntityException $ex) {
+            $this->assertEquals('Could not validate Client secret.', $ex->getMessage());
+            return;
+        }
+        $this->assertTrue(false); // Should not go here.
+    }
+
+    public function testGetClientEntityInvalidGrantType() {
+        $client = new Client('test', 'example.com'); // No grant passed, so 0.
+
+        $this->entityManagerMock
+            ->shouldReceive('getRepository')
+            ->once()
+            ->with(Client::class)
+            ->andReturn(
+                Mockery::mock(ObjectRepository::class)
+                    ->shouldReceive('findOneBy')
+                    ->once()
+                    ->with(['identifier' => 'test'])
+                    ->andReturn($client)
+                    ->getMock()
+            );
+
+        try {
+            $this->repository->getClientEntity('test', 'password', null, false);
+        } catch (EntityException $ex) {
+            $this->assertEquals('Client did not have requested grant.', $ex->getMessage());
+            return;
+        }
+        $this->assertTrue(false); // Should not go here.
     }
 
 }

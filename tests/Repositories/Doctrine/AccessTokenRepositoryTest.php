@@ -13,11 +13,11 @@ use Jitesoft\Log\NullLogger;
 use Jitesoft\OAuth\Lumen\Entities\AccessToken;
 use Jitesoft\OAuth\Lumen\Entities\Client;
 use Jitesoft\OAuth\Lumen\Repositories\Doctrine\AccessTokenRepository;
+use Jitesoft\OAuth\Lumen\Tests\TestCase;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 use Mockery;
 use Mockery\MockInterface;
-use PHPUnit\Framework\TestCase;
 
 class AccessTokenRepositoryTest extends TestCase {
 
