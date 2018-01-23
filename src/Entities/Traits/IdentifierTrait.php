@@ -26,13 +26,9 @@ trait IdentifierTrait {
     /**
      * Set the token's identifier.
      *
-     * @param string|int $identifier
+     * @param string $identifier
      */
     public function setIdentifier($identifier) {
-        if (is_string($identifier)) {
-            $identifier = intval($identifier);
-        }
-
         $this->identifier = $identifier;
     }
 

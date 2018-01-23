@@ -11,6 +11,7 @@ use Jitesoft\Log\StdLogger;
 use Jitesoft\OAuth\Lumen\Entities\RefreshToken;
 use Jitesoft\OAuth\Lumen\Repositories\Doctrine\RefreshTokenRepository;
 use Jitesoft\OAuth\Lumen\Tests\TestCase;
+use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
 use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
 use Mockery;
@@ -28,7 +29,7 @@ class RefreshTokenRepositoryTest extends TestCase {
 
     public function testGetNewRefreshToken() {
         $token = $this->repository->getNewRefreshToken();
-        $this->assertInstanceOf(RefreshTokenRepositoryInterface::class, $token);
+        $this->assertInstanceOf(RefreshTokenEntityInterface::class, $token);
     }
 
     public function testPersistNewRefreshToken() {
@@ -48,14 +49,14 @@ class RefreshTokenRepositoryTest extends TestCase {
                     ->getMock()
             );
 
-        $expectation2 = $this->entityManagerMock
-            ->shouldReceive('persist')
+        $expectation2 = $this->entityManagerMock->shouldReceive('persist')
             ->once()
             ->with($token);
 
         $this->repository->persistNewRefreshToken($token);
-        $this->assertTrue($expectation->verify());
-        $this->assertTrue($expectation2->verify());
+        $expectation->verify();
+        $expectation2->verify();
+        $this->assertTrue(true);
     }
 
     public function testPersistNewRefreshTokenFailure() {
@@ -78,7 +79,9 @@ class RefreshTokenRepositoryTest extends TestCase {
         try {
             $this->repository->persistNewRefreshToken($token);
         } catch (UniqueTokenIdentifierConstraintViolationException $ex) {
-            $this->assertTrue($expectation->verify());
+            $expectation->verify();
+            $this->assertTrue(true);
+            return;
         }
 
         $this->assertTrue(false);
@@ -90,12 +93,27 @@ class RefreshTokenRepositoryTest extends TestCase {
         $token->setIdentifier('abc');
 
         $expectation = $this->entityManagerMock
+            ->shouldReceive('getRepository')
+            ->once()
+            ->with(RefreshToken::class)
+            ->andReturn(
+                Mockery::mock(ObjectRepository::class)
+                    ->shouldReceive('findOneBy')
+                    ->once()
+                    ->with(['identifier' => 'abc'])
+                    ->andReturn($token)
+                    ->getMock()
+            );
+
+        $expectation2 = $this->entityManagerMock
             ->shouldReceive('remove')
             ->once()
             ->with($token);
 
-        $this->repository->revokeRefreshToken($token);
-        $this->assertTrue($expectation->verify());
+        $this->repository->revokeRefreshToken($token->getIdentifier());
+        $expectation->verify();
+        $expectation2->verify();
+        $this->assertTrue(true);
     }
 
     public function testIsRefreshTokenRevoked() {
@@ -106,7 +124,7 @@ class RefreshTokenRepositoryTest extends TestCase {
             ->shouldReceive('getRepository')
             ->twice()
             ->with(RefreshToken::class)
-            ->andReturn([
+            ->andReturn(
                 Mockery::mock(ObjectRepository::class)
                     ->shouldReceive('findOneBy')
                     ->once()
@@ -119,11 +137,11 @@ class RefreshTokenRepositoryTest extends TestCase {
                     ->with(['identifier' => '123'])
                     ->andReturn($token)
                     ->getMock()
-            ]);
+            );
 
-        $this->assertFalse($this->repository->isRefreshTokenRevoked($token->getIdentifier()));
-        $this->assertTrue($this->repository->isRefreshTokenRevoked('123'));
-        $this->assertTrue($expectation->verify());
+        $this->assertTrue($this->repository->isRefreshTokenRevoked($token->getIdentifier()));
+        $this->assertFalse($this->repository->isRefreshTokenRevoked('123'));
+        $expectation->verify();
 
     }
 

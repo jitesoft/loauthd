@@ -6,6 +6,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 namespace Jitesoft\OAuth\Lumen\Repositories\Doctrine;
 
+use Jitesoft\OAuth\Lumen\Entities\RefreshToken;
 use League\OAuth2\Server\Entities\RefreshTokenEntityInterface as Token;
 use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
@@ -18,7 +19,7 @@ class RefreshTokenRepository extends AbstractRepository implements RefreshTokenR
      * @return Token
      */
     public function getNewRefreshToken(): Token {
-        // TODO: Implement getNewRefreshToken() method.
+        return new RefreshToken();
     }
 
     /**
@@ -29,7 +30,15 @@ class RefreshTokenRepository extends AbstractRepository implements RefreshTokenR
      * @throws UniqueTokenIdentifierConstraintViolationException
      */
     public function persistNewRefreshToken(Token $refreshTokenEntity) {
-        // TODO: Implement persistNewRefreshToken() method.
+        $has = $this->em->getRepository(RefreshToken::class)->findOneBy([
+            'identifier' => $refreshTokenEntity->getIdentifier()
+        ]) !== null;
+
+        if ($has) {
+            throw new UniqueTokenIdentifierConstraintViolationException('RefreshToken already persisted.', 0, '');
+        }
+
+        $this->em->persist($refreshTokenEntity);
     }
 
     /**
@@ -38,7 +47,12 @@ class RefreshTokenRepository extends AbstractRepository implements RefreshTokenR
      * @param string $tokenId
      */
     public function revokeRefreshToken($tokenId) {
-        // TODO: Implement revokeRefreshToken() method.
+        $entity = $this->em->getRepository(RefreshToken::class)->findOneBy([
+            'identifier' => $tokenId
+        ]);
+        if ($entity !== null) {
+            $this->em->remove($entity);
+        }
     }
 
     /**
@@ -49,6 +63,9 @@ class RefreshTokenRepository extends AbstractRepository implements RefreshTokenR
      * @return bool Return true if this token has been revoked
      */
     public function isRefreshTokenRevoked($tokenId) {
-        // TODO: Implement isRefreshTokenRevoked() method.
+        return $this->em->getRepository(RefreshToken::class)->findOneBy([
+            'identifier' => $tokenId
+        ]) === null;
     }
+
 }
