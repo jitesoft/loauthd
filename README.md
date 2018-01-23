@@ -9,7 +9,7 @@ It's built on top of the [League\OAuth2](http://oauth2.thephpleague.com/) packag
 
 [![pipeline status](https://gitlab.com/jitesoft/open-source/php/loauthd2/badges/master/pipeline.svg)](https://gitlab.com/jitesoft/open-source/php/loauthd2/commits/master)
 
-[![Build Status](https://travis-ci.org/jitesoft/loauthd2.svg?branch=master)](https://travis-ci.org/jitesoft/loauthd2)
+[![Dependency Status](https://gemnasium.com/badges/github.com/jitesoft/loauthd2.svg)](https://gemnasium.com/github.com/jitesoft/loauthd2)
 
 ## Installation
 

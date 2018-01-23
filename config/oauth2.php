@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'auth_key' => env('OAUTH_AUTHORIZATION_KEY', ''),
+    'encryption_key' => env('OAUTH_AUTHORIZATION_KEY', ''),
 
     /*
     |--------------------------------------------------------------------------
@@ -15,12 +15,18 @@ return [
     | Recommendation is to change the User entity to your own user models.
     */
     'entities' => [
-        'AccessToken'  => Jitesoft\OAuth\Lumen\Entities\AccessToken::class,
-        'Client'       => Jitesoft\OAuth\Lumen\Entities\Client::class,
-        'RefreshToken' => Jitesoft\OAuth\Lumen\Entities\RefreshToken::class,
-        'Scope'        => Jitesoft\OAuth\Lumen\Entities\Scope::class,
-        'AuthCode'     => Jitesoft\OAuth\Lumen\Entities\AuthCode::class,
-        'User'         => Jitesoft\OAuth\Lumen\Entities\User::class
+        League\OAuth2\Server\Entities\AccessTokenEntityInterface::class
+            => Jitesoft\OAuth\Lumen\Entities\AccessToken::class,
+        League\OAuth2\Server\Entities\ClientEntityInterface::class
+            => Jitesoft\OAuth\Lumen\Entities\Client::class,
+        League\OAuth2\Server\Entities\RefreshTokenEntityInterface::class
+            => Jitesoft\OAuth\Lumen\Entities\RefreshToken::class,
+        League\OAuth2\Server\Entities\ScopeEntityInterface::class
+            => Jitesoft\OAuth\Lumen\Entities\Scope::class,
+        League\OAuth2\Server\Entities\AuthCodeEntityInterface::class
+            => Jitesoft\OAuth\Lumen\Entities\AuthCode::class,
+        League\OAuth2\Server\Entities\UserEntityInterface::class
+            => Jitesoft\OAuth\Lumen\Entities\User::class
     ],
     /*
     |--------------------------------------------------------------------------
@@ -35,12 +41,45 @@ return [
     |
     */
     'repositories' => [
-        'AccessTokenRepository'  => Jitesoft\OAuth\Lumen\Repositories\Doctrine\AccessTokenRepository::class,
-        'ClientRepository'       => Jitesoft\OAuth\Lumen\Repositories\Doctrine\ClientRepository::class,
-        'RefreshTokenRepository' => Jitesoft\OAuth\Lumen\Repositories\Doctrine\RefreshTokenRepository::class,
-        'ScopeRepository'        => Jitesoft\OAuth\Lumen\Repositories\Doctrine\ScopeRepository::class,
-        'AuthCodeRepository'     => Jitesoft\OAuth\Lumen\Repositories\Doctrine\ScopeRepository::class,
-        'UserRepository'         => Jitesoft\OAuth\Lumen\Repositories\Doctrine\UserRepository::class
-    ]
+        League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface::class
+            => Jitesoft\OAuth\Lumen\Repositories\Doctrine\AccessTokenRepository::class,
+        League\OAuth2\Server\Repositories\ClientRepositoryInterface::class
+            => Jitesoft\OAuth\Lumen\Repositories\Doctrine\ClientRepository::class,
+        League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface::class
+            => Jitesoft\OAuth\Lumen\Repositories\Doctrine\RefreshTokenRepository::class,
+        League\OAuth2\Server\Repositories\ScopeRepositoryInterface::class
+            => Jitesoft\OAuth\Lumen\Repositories\Doctrine\ScopeRepository::class,
+        League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface::class
+            => Jitesoft\OAuth\Lumen\Repositories\Doctrine\ScopeRepository::class,
+        League\OAuth2\Server\Repositories\UserRepositoryInterface::class
+            => Jitesoft\OAuth\Lumen\Repositories\Doctrine\UserRepository::class
+    ],
+    /*
+    |--------------------------------------------------------------------------
+    | Grant types.
+    |--------------------------------------------------------------------------
+    |
+    | Grant types available to use.
+    | If one is not wanted, just comment it out and it will not be loaded
+    | in to the auth server.
+    |
+    */
+    'grant_types' => [
+        'AuthCode'          => League\OAuth2\Server\Grant\AuthCodeGrant::class,
+        'RefreshToken'      => League\OAuth2\Server\Grant\RefreshTokenGrant::class,
+        'Password'          => League\OAuth2\Server\Grant\PasswordGrant::class,
+        'Implicit'          => League\OAuth2\Server\Grant\ImplicitGrant::class,
+        'ClientCredentials' => League\OAuth2\Server\Grant\ClientCredentialsGrant::class
+    ],
+    /*
+    |--------------------------------------------------------------------------
+    | Token lifetime.
+    |--------------------------------------------------------------------------
+    |
+    | Lifetime of the auth tokens.
+    | Change to preferred lifetime.
+    |
+    */
+    'token_ttl' => Carbon\Carbon::now()->addHour(1),
 
 ];
