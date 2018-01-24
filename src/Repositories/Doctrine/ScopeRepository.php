@@ -6,11 +6,13 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 namespace Jitesoft\OAuth\Lumen\Repositories\Doctrine;
 
-use League\OAuth2\Server\Entities\ClientEntityInterface as Client;
-use League\OAuth2\Server\Entities\ScopeEntityInterface as Scope;
-use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
+use League\OAuth2\Server\{
+    Entities\ClientEntityInterface as Client,
+    Entities\ScopeEntityInterface as Scope,
+    Repositories\ScopeRepositoryInterface
+};
 
-class ScopeRepository implements ScopeRepositoryInterface {
+class ScopeRepository extends AbstractRepository implements ScopeRepositoryInterface {
 
     /**
      * Return information about a scope.
@@ -36,6 +38,11 @@ class ScopeRepository implements ScopeRepositoryInterface {
      * @return Scope[]|array
      */
     public function finalizeScopes(array $scopes, $grantType, Client $clientEntity, $userIdentifier = null): array {
-        // TODO: Implement finalizeScopes() method.
+
+
+        $outScopes = [];
+
+
     }
+
 }

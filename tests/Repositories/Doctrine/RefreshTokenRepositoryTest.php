@@ -7,12 +7,12 @@
 namespace Jitesoft\OAuth\Lumen\Tests\Repositories\Doctrine;
 
 use Doctrine\Common\Persistence\ObjectRepository;
+use Jitesoft\Exceptions\Database\Entity\UniqueConstraintException;
 use Jitesoft\Log\StdLogger;
 use Jitesoft\OAuth\Lumen\Entities\RefreshToken;
 use Jitesoft\OAuth\Lumen\Repositories\Doctrine\RefreshTokenRepository;
 use Jitesoft\OAuth\Lumen\Tests\TestCase;
 use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
-use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
 use Mockery;
 
@@ -78,7 +78,7 @@ class RefreshTokenRepositoryTest extends TestCase {
 
         try {
             $this->repository->persistNewRefreshToken($token);
-        } catch (UniqueTokenIdentifierConstraintViolationException $ex) {
+        } catch (UniqueConstraintException $ex) {
             $expectation->verify();
             $this->assertTrue(true);
             return;
@@ -142,7 +142,6 @@ class RefreshTokenRepositoryTest extends TestCase {
         $this->assertTrue($this->repository->isRefreshTokenRevoked($token->getIdentifier()));
         $this->assertFalse($this->repository->isRefreshTokenRevoked('123'));
         $expectation->verify();
-
     }
 
 }

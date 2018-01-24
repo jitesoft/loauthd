@@ -6,9 +6,9 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 namespace Jitesoft\OAuth\Lumen\Repositories\Doctrine;
 
+use Jitesoft\Exceptions\Database\Entity\UniqueConstraintException;
 use Jitesoft\OAuth\Lumen\Entities\AuthCode;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface as AuthCodeInterface;
-use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
 
 class AuthCodeRepository extends AbstractRepository implements AuthCodeRepositoryInterface {
@@ -27,7 +27,7 @@ class AuthCodeRepository extends AbstractRepository implements AuthCodeRepositor
      *
      * @param AuthCodeInterface $authCodeEntity
      *
-     * @throws UniqueTokenIdentifierConstraintViolationException
+     * @throws UniqueConstraintException
      */
     public function persistNewAuthCode(AuthCodeInterface $authCodeEntity) {
         $out = $this->em->getRepository(AuthCode::class)->findOneBy([
@@ -35,9 +35,7 @@ class AuthCodeRepository extends AbstractRepository implements AuthCodeRepositor
         ]);
 
         if ($out !== null) {
-            throw new UniqueTokenIdentifierConstraintViolationException(
-                'AuthCode already exist.', 0, 'Unique constraint failed.'
-            );
+            throw new UniqueConstraintException('AuthCode already exist.', AuthCode::class);
         }
 
         $this->em->persist($authCodeEntity);

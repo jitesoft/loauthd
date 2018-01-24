@@ -6,11 +6,8 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 namespace Jitesoft\OAuth\Lumen;
 
-use Carbon\Carbon;
-use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\ServiceProvider;
 use Jitesoft\OAuth\Lumen\Commands\KeyGenerateCommand;
-use Laravel\Lumen\Application;
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\CryptKey;
 use League\OAuth2\Server\Grant\PasswordGrant;

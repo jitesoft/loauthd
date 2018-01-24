@@ -7,7 +7,8 @@
 namespace Jitesoft\OAuth\Lumen\Tests\Repositories\Doctrine;
 
 use Doctrine\Common\Persistence\ObjectRepository;
-use Jitesoft\Exceptions\Database\Entity\EntityException;
+use Jitesoft\Exceptions\Security\InvalidCredentialsException;
+use Jitesoft\Exceptions\Security\OAuth2\InvalidGrantException;
 use Jitesoft\Log\StdLogger;
 use Jitesoft\OAuth\Lumen\Entities\Client;
 use Jitesoft\OAuth\Lumen\OAuth;
@@ -112,7 +113,7 @@ class ClientRepositoryTest extends TestCase {
 
         try {
             $this->repository->getClientEntity('test', 'password', 'secret', true);
-        } catch (EntityException $ex) {
+        } catch (InvalidCredentialsException $ex) {
             $this->assertEquals('Could not validate Client secret.', $ex->getMessage());
             return;
         }
@@ -137,7 +138,7 @@ class ClientRepositoryTest extends TestCase {
 
         try {
             $this->repository->getClientEntity('test', 'password', null, false);
-        } catch (EntityException $ex) {
+        } catch (InvalidGrantException $ex) {
             $this->assertEquals('Client did not have requested grant.', $ex->getMessage());
             return;
         }

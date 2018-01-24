@@ -6,9 +6,9 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 namespace Jitesoft\OAuth\Lumen\Repositories\Doctrine;
 
+use Jitesoft\Exceptions\Database\Entity\UniqueConstraintException;
 use Jitesoft\OAuth\Lumen\Entities\RefreshToken;
 use League\OAuth2\Server\Entities\RefreshTokenEntityInterface as Token;
-use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
 
 class RefreshTokenRepository extends AbstractRepository implements RefreshTokenRepositoryInterface {
@@ -27,7 +27,7 @@ class RefreshTokenRepository extends AbstractRepository implements RefreshTokenR
      *
      * @param Token $refreshTokenEntity
      *
-     * @throws UniqueTokenIdentifierConstraintViolationException
+     * @throws UniqueConstraintException
      */
     public function persistNewRefreshToken(Token $refreshTokenEntity) {
         $has = $this->em->getRepository(RefreshToken::class)->findOneBy([
@@ -35,7 +35,7 @@ class RefreshTokenRepository extends AbstractRepository implements RefreshTokenR
         ]) !== null;
 
         if ($has) {
-            throw new UniqueTokenIdentifierConstraintViolationException('RefreshToken already persisted.', 0, '');
+            throw new UniqueConstraintException('RefreshToken already exist.', RefreshToken::class);
         }
 
         $this->em->persist($refreshTokenEntity);

@@ -9,13 +9,13 @@ namespace Jitesoft\OAuth\Lumen\Tests\Repositories\Doctrine;
 use Carbon\Carbon;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Jitesoft\Exceptions\Database\Entity\UniqueConstraintException;
 use Jitesoft\Log\NullLogger;
 use Jitesoft\OAuth\Lumen\Entities\AccessToken;
 use Jitesoft\OAuth\Lumen\Entities\Client;
 use Jitesoft\OAuth\Lumen\Repositories\Doctrine\AccessTokenRepository;
 use Jitesoft\OAuth\Lumen\Tests\TestCase;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
-use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 use Mockery;
 use Mockery\MockInterface;
 
@@ -74,7 +74,7 @@ class AccessTokenRepositoryTest extends TestCase {
 
         try {
             $this->repository->persistNewAccessToken($token);
-        } catch (UniqueTokenIdentifierConstraintViolationException $ex) {
+        } catch (UniqueConstraintException $ex) {
             // Should happen.
             $this->assertTrue(true);
         }

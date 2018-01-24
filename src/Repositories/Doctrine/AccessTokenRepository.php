@@ -7,12 +7,12 @@
 namespace Jitesoft\OAuth\Lumen\Repositories\Doctrine;
 
 use Carbon\Carbon;
+use Jitesoft\Exceptions\Database\Entity\UniqueConstraintException;
 use Jitesoft\OAuth\Lumen\Entities\AccessToken;
 use League\OAuth2\Server\{
     Entities\AccessTokenEntityInterface as Token,
     Entities\ClientEntityInterface,
     Entities\ScopeEntityInterface,
-    Exception\UniqueTokenIdentifierConstraintViolationException,
     Repositories\AccessTokenRepositoryInterface
 };
 
@@ -43,7 +43,7 @@ class AccessTokenRepository extends AbstractRepository implements AccessTokenRep
      *
      * @param Token $accessTokenEntity
      *
-     * @throws UniqueTokenIdentifierConstraintViolationException
+     * @throws UniqueConstraintException
      */
     public function persistNewAccessToken(Token $accessTokenEntity) {
         $out = $this->em->getRepository(AccessToken::class)->findOneBy([
@@ -56,9 +56,7 @@ class AccessTokenRepository extends AbstractRepository implements AccessTokenRep
             ]
         );
         if ($out !== null) {
-            throw new UniqueTokenIdentifierConstraintViolationException(
-                'AccessToken already exist.', 0, 'Unique constraint failed.'
-            );
+            throw new UniqueConstraintException('AccessToken already exist.', AccessToken::class);
         }
 
         $this->em->persist($accessTokenEntity);

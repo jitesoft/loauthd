@@ -12,7 +12,7 @@ class OAuth {
     public const GRANT_TYPES = [
         'authorization_code' => self::GRANT_TYPE_AUTH_CODE,
         'refresh_token'      => self::GRANT_TYPE_REFRESH_TOKEN,
-        'password'    => self::GRANT_TYPE_PASSWORD,
+        'password'           => self::GRANT_TYPE_PASSWORD,
         'implicit'           => self::GRANT_TYPE_IMPLICIT,
         'client_credentials' => self::GRANT_TYPE_CLIENT_CREDENTIALS,
     ];

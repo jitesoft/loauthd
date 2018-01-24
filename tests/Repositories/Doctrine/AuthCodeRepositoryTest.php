@@ -7,12 +7,12 @@
 namespace Jitesoft\OAuth\Lumen\Tests\Repositories\Doctrine;
 
 use Doctrine\Common\Persistence\ObjectRepository;
+use Jitesoft\Exceptions\Database\Entity\UniqueConstraintException;
 use Jitesoft\Log\NullLogger;
 use Jitesoft\OAuth\Lumen\Entities\AuthCode;
 use Jitesoft\OAuth\Lumen\Repositories\Doctrine\AuthCodeRepository;
 use Jitesoft\OAuth\Lumen\Tests\TestCase;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
-use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
 use Mockery;
 
@@ -73,7 +73,7 @@ class AuthCodeRepositoryTest extends TestCase {
 
         try {
             $this->repository->persistNewAuthCode($code);
-        } catch (UniqueTokenIdentifierConstraintViolationException $ex) {
+        } catch (UniqueConstraintException $ex) {
             $this->assertTrue(true);
         }
 

@@ -6,7 +6,8 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 namespace Jitesoft\OAuth\Lumen\Repositories\Doctrine;
 
-use Jitesoft\Exceptions\Database\Entity\EntityException;
+use Jitesoft\Exceptions\Security\InvalidCredentialsException;
+use Jitesoft\Exceptions\Security\OAuth2\InvalidGrantException;
 use Jitesoft\OAuth\Lumen\Entities\Client;
 use Jitesoft\OAuth\Lumen\OAuth;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
@@ -22,7 +23,8 @@ class ClientRepository extends AbstractRepository implements ClientRepositoryInt
      * @param bool $mustValidateSecret If true the client must attempt to validate the secret if the client
      *                                        is confidential
      * @return Client|null
-     * @throws EntityException
+     * @throws InvalidCredentialsException
+     * @throws InvalidGrantException
      */
     public function getClientEntity($identifier, $grantType, $secret = null, $mustValidateSecret = true): ?Client {
         /** @var Client|null $client */
@@ -34,19 +36,22 @@ class ClientRepository extends AbstractRepository implements ClientRepositoryInt
             return $client;
         }
 
+        $grantFlag = 0;
         if ($grantType === '*') {
-            $grantType |= array_map(function($i) {
-                return $i;
-            }, array_values(OAuth::GRANT_TYPES));
+            foreach (array_values(OAuth::GRANT_TYPES) as $v) {
+                $grantFlag |= $v;
+            }
+        } else {
+            $grantFlag |= OAuth::GRANT_TYPES[$grantType];
         }
 
-        if (!$client->hasGrant(OAuth::GRANT_TYPES[$grantType])) {
-            throw new EntityException('Client did not have requested grant.');
+        if (!$client->hasGrant($grantFlag)) {
+            throw new InvalidGrantException('Client did not have requested grant.', $grantType);
         }
 
         if ($mustValidateSecret) {
             if (!$client->validateSecret($secret)) {
-                throw new EntityException('Could not validate Client secret.');
+                throw new InvalidCredentialsException('Could not validate Client secret.');
             }
         }
 

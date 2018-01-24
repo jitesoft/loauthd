@@ -80,6 +80,7 @@ return [
     | Change to preferred lifetime.
     |
     */
-    'token_ttl' => Carbon\Carbon::now()->addHour(1),
-
+    'token_ttl'           => Carbon\Carbon::now()->addHour(1),
+    'user_identification' => 'userName',
+    'password_hash'       => Illuminate\Hashing\BcryptHasher::class
 ];

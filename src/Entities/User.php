@@ -7,8 +7,9 @@
 namespace Jitesoft\OAuth\Lumen\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
-use Jitesoft\OAuth\Lumen\Entities\Traits\IdentifierTrait;
-use League\OAuth2\Server\Entities\UserEntityInterface;
+use Jitesoft\OAuth\Lumen\Entities\Contracts\UserInterface;
+use Jitesoft\OAuth\Lumen\Entities\Traits\IdTrait;
+use Jitesoft\OAuth\Lumen\Entities\Traits\OAuthUserEntityTrait;
 
 /**
  * Class User
@@ -16,14 +17,19 @@ use League\OAuth2\Server\Entities\UserEntityInterface;
  * @ORM\Entity
  * @ORM\Table(name="oauth2/users")
  */
-class User implements UserEntityInterface {
-    use IdentifierTrait;
+class User implements UserInterface {
+    use OAuthUserEntityTrait;
+    use IdTrait;
 
     /**
      * @param string $identifier
+     * @param string $authKey
+     * @param string $password
      */
-    public function __construct(string $identifier) {
+    public function __construct(string $identifier, string $authKey, string $password) {
         $this->identifier = $identifier;
+        $this->authKey    = $authKey;
+        $this->password   = $password;
     }
 
 }
