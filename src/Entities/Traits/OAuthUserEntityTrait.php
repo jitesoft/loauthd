@@ -50,4 +50,5 @@ trait OAuthUserEntityTrait {
     public function getPassword(): string {
         return $this->password;
     }
+
 }

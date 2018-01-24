@@ -38,7 +38,6 @@ class RefreshToken implements RefreshTokenEntityInterface {
      */
     protected $expiry;
 
-
     /**
      * @param AccessTokenEntityInterface $accessToken
      */

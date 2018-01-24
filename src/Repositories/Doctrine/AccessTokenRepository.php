@@ -9,12 +9,10 @@ namespace Jitesoft\Loauthd\Repositories\Doctrine;
 use Carbon\Carbon;
 use Jitesoft\Exceptions\Database\Entity\UniqueConstraintException;
 use Jitesoft\Loauthd\Entities\AccessToken;
-use League\OAuth2\Server\{
-    Entities\AccessTokenEntityInterface as Token,
-    Entities\ClientEntityInterface,
-    Entities\ScopeEntityInterface,
-    Repositories\AccessTokenRepositoryInterface
-};
+use League\OAuth2\Server\Entities\AccessTokenEntityInterface as Token;
+use League\OAuth2\Server\Entities\ClientEntityInterface;
+use League\OAuth2\Server\Entities\ScopeEntityInterface;
+use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
 
 /**
  * Class AccessTokenRepository
@@ -96,4 +94,5 @@ class AccessTokenRepository extends AbstractRepository implements AccessTokenRep
 
         return $out === null;
     }
+
 }

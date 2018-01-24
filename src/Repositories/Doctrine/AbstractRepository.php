@@ -26,4 +26,5 @@ class AbstractRepository {
         $this->logger = $logger;
         $this->em     = $em;
     }
+
 }

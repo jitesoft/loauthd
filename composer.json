@@ -42,6 +42,7 @@
         }
     },
     "scripts": {
-        "test": "phpunit --configuration=phpunit.xml"
+        "test": "phpunit --configuration=phpunit.xml",
+        "stylecheck": "phpcs -p --standard=style.xml src"
     }
 }

@@ -16,4 +16,5 @@ interface UserRepositoryInterface extends LeagueUserRepositoryInterface {
      * @return UserInterface|null
      */
     public function getUserByIdentifier(string $identifier): ?UserInterface;
+
 }

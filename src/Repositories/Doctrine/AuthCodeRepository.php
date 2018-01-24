@@ -72,4 +72,5 @@ class AuthCodeRepository extends AbstractRepository implements AuthCodeRepositor
 
         return $out == null;
     }
+
 }

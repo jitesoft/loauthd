@@ -7,22 +7,17 @@
 namespace Jitesoft\Loauthd\Repositories\Doctrine;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Jitesoft\Exceptions\{
-    Database\Entity\EntityException, Lazy\NotImplementedException, Security\OAuth2\InvalidGrantException
-};
-use Jitesoft\Loauthd\{
-    Contracts\ScopeValidatorInterface,
-    Entities\Contracts\ClientInterface,
-    Entities\Scope,
-    Entities\User,
-    OAuth,
-    Repositories\Doctrine\Contracts\UserRepositoryInterface,
-    Repositories\Doctrine\Contracts\ScopeRepositoryInterface
-};
-use League\OAuth2\Server\{
-    Entities\ClientEntityInterface as Client,
-    Entities\ScopeEntityInterface
-};
+use Jitesoft\Exceptions\Database\Entity\EntityException;
+use Jitesoft\Exceptions\Security\OAuth2\InvalidGrantException;
+use Jitesoft\Loauthd\Contracts\ScopeValidatorInterface;
+use Jitesoft\Loauthd\Entities\Contracts\ClientInterface;
+use Jitesoft\Loauthd\Entities\Scope;
+use Jitesoft\Loauthd\Entities\User;
+use Jitesoft\Loauthd\OAuth;
+use Jitesoft\Loauthd\Repositories\Doctrine\Contracts\UserRepositoryInterface;
+use Jitesoft\Loauthd\Repositories\Doctrine\Contracts\ScopeRepositoryInterface;
+use League\OAuth2\Server\Entities\ClientEntityInterface as Client;
+use League\OAuth2\Server\Entities\ScopeEntityInterface;
 use Psr\Log\LoggerInterface;
 
 class ScopeRepository extends AbstractRepository implements ScopeRepositoryInterface {
@@ -102,4 +97,5 @@ class ScopeRepository extends AbstractRepository implements ScopeRepositoryInter
     public function getAll(): array {
         return $this->em->getRepository(Scope::class)->findAll();
     }
+
 }

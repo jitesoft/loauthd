@@ -14,10 +14,8 @@ use Jitesoft\Loauthd\Entities\User;
 use Jitesoft\Loauthd\OAuth;
 use Jitesoft\Loauthd\Repositories\Doctrine\Contracts\UserRepositoryInterface;
 use Psr\Log\LoggerInterface;
-use League\OAuth2\Server\{
-    Entities\ClientEntityInterface as Client,
-    Entities\UserEntityInterface as OAuthUser
-};
+use League\OAuth2\Server\Entities\ClientEntityInterface as Client;
+use League\OAuth2\Server\Entities\UserEntityInterface as OAuthUser;
 
 class UserRepository extends AbstractRepository implements UserRepositoryInterface {
 

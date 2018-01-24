@@ -20,6 +20,14 @@ abstract class OAuth {
         'client_credentials' => self::GRANT_TYPE_CLIENT_CREDENTIALS,
     ];
 
+    public static function getGrantsAsFlags(...$grants) {
+        $out = 0;
+
+        foreach ($grants as $grant) {
+            $out |= self::GRANT_TYPES[$grant];
+        }
+    }
+
     public const GRANT_TYPE_AUTH_CODE          = 1;
     public const GRANT_TYPE_REFRESH_TOKEN      = 2;
     public const GRANT_TYPE_PASSWORD           = 4;

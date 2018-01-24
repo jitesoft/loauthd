@@ -32,4 +32,5 @@ class ScopeValidator implements ScopeValidatorInterface {
 
         return $scopeRepository->getAll();
     }
+
 }
