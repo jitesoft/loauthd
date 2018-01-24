@@ -7,18 +7,24 @@
 namespace Jitesoft\Loauthd\Tests\Repositories\Doctrine;
 
 use Doctrine\Common\Persistence\ObjectRepository;
+use Hamcrest\Text\StringContainsInOrder;
 use Illuminate\Hashing\BcryptHasher;
 use Jitesoft\Exceptions\Database\Entity\EntityException;
 use Jitesoft\Exceptions\Security\OAuth2\InvalidGrantException;
+use Jitesoft\Loauthd\Contracts\ScopeValidatorInterface;
 use Jitesoft\Loauthd\Entities\Client;
+use Jitesoft\Loauthd\Entities\Contracts\UserInterface;
 use Jitesoft\Loauthd\Entities\Scope;
 use Jitesoft\Loauthd\Entities\User;
 use Jitesoft\Loauthd\OAuth;
+use Jitesoft\Loauthd\Repositories\Doctrine\Contracts\ScopeRepositoryInterface;
+use Jitesoft\Loauthd\ScopeValidator;
 use Jitesoft\Log\StdLogger;
 use Jitesoft\Loauthd\Repositories\Doctrine\ScopeRepository;
 use Jitesoft\Loauthd\Repositories\Doctrine\UserRepository;
 use Jitesoft\Loauthd\Tests\TestCase;
-use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
+use League\OAuth2\Server\Entities\ClientEntityInterface;
+use League\OAuth2\Server\Entities\ScopeEntityInterface;
 use Mockery;
 
 class ScopeRepositoryTest extends TestCase {
@@ -33,9 +39,31 @@ class ScopeRepositoryTest extends TestCase {
         $this->repository = new ScopeRepository(
             $this->entityManagerMock,
             $logger,
-            new UserRepository($this->entityManagerMock, $logger, new BcryptHasher())
+            new UserRepository($this->entityManagerMock, $logger, new BcryptHasher()),
+            new ScopeValidator()
         );
     }
+
+
+    public function testGetAll() {
+
+        $expectation = $this->entityManagerMock
+            ->shouldReceive('getRepository')
+            ->twice()
+            ->with(Scope::class)
+            ->andReturn(
+                Mockery::mock(ObjectRepository::class)
+                    ->shouldReceive('findAll')
+                    ->twice()
+                    ->andReturn([], [new Scope('a'), new Scope('b'), new Scope('c')])
+                    ->getMock()
+            );
+
+        $this->assertEmpty($this->repository->getAll());
+        $this->assertCount(3, $this->repository->getAll());
+        $expectation->verify();
+    }
+
 
     public function testGetScopeEntityByIdentifier() {
         $scope       = new Scope('scope_name');
@@ -94,7 +122,7 @@ class ScopeRepositoryTest extends TestCase {
     }
 
     public function testFinalizeScopesInvalidUser() {
-        $client = new Client('test', '', '', OAuth::GRANT_TYPE_PASSWORD);
+        $client      = new Client('test', '', '', OAuth::GRANT_TYPE_PASSWORD);
         $expectation = $this->entityManagerMock
             ->shouldReceive('getRepository')
             ->once()
@@ -121,14 +149,46 @@ class ScopeRepositoryTest extends TestCase {
     }
 
     public function testFinalizeScopesRemoveScopes() {
+        $ret    = [new Scope('test'), new Scope('test2')];
+        $req    = [new Scope('test'), new Scope('test2'), new Scope('test3')];
+        $client = new Client('test', '', '', OAuth::GRANT_TYPE_PASSWORD);
 
+        $mock = Mockery::mock(ScopeValidatorInterface::class);
+        $exp  = $mock->shouldReceive('validateScopes')
+            ->once()
+            ->with($req, 'password', $client, null, $this->repository)
+            ->andReturn($ret);
+
+        $ref  = new \ReflectionClass(ScopeRepository::class);
+        $prop = $ref->getProperty('scopeValidator');
+        $prop->setAccessible(true);
+        $prop->setValue($this->repository, $mock);
+
+        $out = $this->repository->finalizeScopes($req, 'password', $client, null);
+        $this->assertEquals($out, $ret);
+        $exp->verify();
     }
 
-    public function testFinalizeScopesAddScopes() {}
+    public function testFinalizeScopesAddScopes() {
 
-    public function testFinalizeScopes() {
+        $ret    = [new Scope('test'), new Scope('test2')];
+        $req    = [new Scope('test2')];
+        $client = new Client('test', '', '', OAuth::GRANT_TYPE_PASSWORD);
 
+        $mock = Mockery::mock(ScopeValidatorInterface::class);
+        $exp  = $mock->shouldReceive('validateScopes')
+            ->once()
+            ->with($req, 'password', $client, null, $this->repository)
+            ->andReturn($ret);
 
+        $ref  = new \ReflectionClass(ScopeRepository::class);
+        $prop = $ref->getProperty('scopeValidator');
+        $prop->setAccessible(true);
+        $prop->setValue($this->repository, $mock);
+
+        $out = $this->repository->finalizeScopes($req, 'password', $client, null);
+        $this->assertEquals($out, $ret);
+        $exp->verify();
     }
 
 }

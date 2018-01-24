@@ -83,12 +83,12 @@ class ScopeRepository extends AbstractRepository implements ScopeRepositoryInter
         }
 
         $user = null;
-        if ($userIdentifier) {
+        if ($userIdentifier !== null) {
             $user = $this->userRepository->getUserByIdentifier($userIdentifier);
-        }
 
-        if ($user === null) {
-            throw new EntityException('Entity not found.', User::class);
+            if ($user === null) {
+                throw new EntityException('Entity not found.', User::class);
+            }
         }
 
         return $this->scopeValidator->validateScopes($scopes, $grantType, $clientEntity, $user, $this);
@@ -100,7 +100,6 @@ class ScopeRepository extends AbstractRepository implements ScopeRepositoryInter
      * @return array|ScopeEntityInterface[]
      */
     public function getAll(): array {
-        throw new NotImplementedException();
-        // TODO: Implement getAll() method.
+        return $this->em->getRepository(Scope::class)->findAll();
     }
 }
