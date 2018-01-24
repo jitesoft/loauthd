@@ -7,13 +7,11 @@
 namespace Jitesoft\Loauthd\Tests\Repositories\Doctrine;
 
 use Doctrine\Common\Persistence\ObjectRepository;
-use Hamcrest\Text\StringContainsInOrder;
 use Illuminate\Hashing\BcryptHasher;
 use Jitesoft\Exceptions\Database\Entity\EntityException;
 use Jitesoft\Exceptions\Security\OAuth2\InvalidGrantException;
 use Jitesoft\Loauthd\Contracts\ScopeValidatorInterface;
 use Jitesoft\Loauthd\Entities\Client;
-use Jitesoft\Loauthd\Entities\Contracts\UserInterface;
 use Jitesoft\Loauthd\Entities\Scope;
 use Jitesoft\Loauthd\Entities\User;
 use Jitesoft\Loauthd\OAuth;
@@ -23,8 +21,6 @@ use Jitesoft\Log\StdLogger;
 use Jitesoft\Loauthd\Repositories\Doctrine\ScopeRepository;
 use Jitesoft\Loauthd\Repositories\Doctrine\UserRepository;
 use Jitesoft\Loauthd\Tests\TestCase;
-use League\OAuth2\Server\Entities\ClientEntityInterface;
-use League\OAuth2\Server\Entities\ScopeEntityInterface;
 use Mockery;
 
 class ScopeRepositoryTest extends TestCase {
@@ -170,7 +166,6 @@ class ScopeRepositoryTest extends TestCase {
     }
 
     public function testFinalizeScopesAddScopes() {
-
         $ret    = [new Scope('test'), new Scope('test2')];
         $req    = [new Scope('test2')];
         $client = new Client('test', '', '', OAuth::GRANT_TYPE_PASSWORD);

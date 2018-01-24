@@ -116,6 +116,8 @@ class Client implements ClientEntityInterface {
     }
 
     /**
+     * Passes a bit-flag for grant types. Verify it against the OAuth::GRANT_TYPES array.
+     *
      * @param int $grant
      * @return bool
      * @see OAuth::GRANT_TYPE_*

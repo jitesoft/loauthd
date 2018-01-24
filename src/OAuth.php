@@ -8,7 +8,7 @@
 
 namespace Jitesoft\Loauthd;
 
-class OAuth {
+abstract class OAuth {
 
     public const CONFIG_NAMESPACE = 'loauthd';
 
@@ -25,4 +25,5 @@ class OAuth {
     public const GRANT_TYPE_PASSWORD           = 4;
     public const GRANT_TYPE_IMPLICIT           = 8;
     public const GRANT_TYPE_CLIENT_CREDENTIALS = 16;
+
 }
