@@ -1,6 +1,6 @@
 <?php
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-  IdentifierTrait.php - Part of the lumen-doctrine-oauth2 project.
+  IdentifierTrait.php - Part of the loauthd project.
 
   © - Jitesoft 2018
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */

@@ -1,6 +1,6 @@
 <?php
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-  ScopeValidatorInterface.php - Part of the lumen-doctrine-oauth2 project.
+  ScopeValidatorInterface.php - Part of the loauthd project.
 
   © - Jitesoft 2018
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
