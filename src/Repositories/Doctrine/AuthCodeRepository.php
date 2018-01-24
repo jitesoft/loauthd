@@ -4,10 +4,10 @@
 
   © - Jitesoft 2018
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-namespace Jitesoft\OAuth\Lumen\Repositories\Doctrine;
+namespace Jitesoft\Loauthd\Repositories\Doctrine;
 
 use Jitesoft\Exceptions\Database\Entity\UniqueConstraintException;
-use Jitesoft\OAuth\Lumen\Entities\AuthCode;
+use Jitesoft\Loauthd\Entities\AuthCode;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface as AuthCodeInterface;
 use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
 

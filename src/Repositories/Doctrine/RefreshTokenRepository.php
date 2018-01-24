@@ -4,10 +4,10 @@
 
   © - Jitesoft 2018
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-namespace Jitesoft\OAuth\Lumen\Repositories\Doctrine;
+namespace Jitesoft\Loauthd\Repositories\Doctrine;
 
 use Jitesoft\Exceptions\Database\Entity\UniqueConstraintException;
-use Jitesoft\OAuth\Lumen\Entities\RefreshToken;
+use Jitesoft\Loauthd\Entities\RefreshToken;
 use League\OAuth2\Server\Entities\RefreshTokenEntityInterface as Token;
 use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
 

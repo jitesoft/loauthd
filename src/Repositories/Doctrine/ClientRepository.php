@@ -4,12 +4,12 @@
 
   © - Jitesoft 2018
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-namespace Jitesoft\OAuth\Lumen\Repositories\Doctrine;
+namespace Jitesoft\Loauthd\Repositories\Doctrine;
 
 use Jitesoft\Exceptions\Security\InvalidCredentialsException;
 use Jitesoft\Exceptions\Security\OAuth2\InvalidGrantException;
-use Jitesoft\OAuth\Lumen\Entities\Client;
-use Jitesoft\OAuth\Lumen\OAuth;
+use Jitesoft\Loauthd\Entities\Client;
+use Jitesoft\Loauthd\OAuth;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 
 class ClientRepository extends AbstractRepository implements ClientRepositoryInterface {

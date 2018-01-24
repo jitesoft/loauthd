@@ -4,13 +4,13 @@
 
   © - Jitesoft 2018
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-namespace Jitesoft\OAuth\Lumen\Repositories\Doctrine;
+namespace Jitesoft\Loauthd\Repositories\Doctrine;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Jitesoft\Exceptions\Security\OAuth2\InvalidGrantException;
-use Jitesoft\OAuth\Lumen\Entities\Contracts\ClientInterface;
-use Jitesoft\OAuth\Lumen\OAuth;
-use Jitesoft\OAuth\Lumen\Repositories\Doctrine\Contracts\UserRepositoryInterface;
+use Jitesoft\Loauthd\Entities\Contracts\ClientInterface;
+use Jitesoft\Loauthd\OAuth;
+use Jitesoft\Loauthd\Repositories\Doctrine\Contracts\UserRepositoryInterface;
 use League\OAuth2\Server\{
     Entities\ClientEntityInterface as Client,
     Entities\ScopeEntityInterface as Scope,

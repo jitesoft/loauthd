@@ -6,7 +6,7 @@
   © - Jitesoft 2018
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-namespace Jitesoft\OAuth\Lumen;
+namespace Jitesoft\Loauthd;
 
 class OAuth {
     public const GRANT_TYPES = [

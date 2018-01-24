@@ -6,7 +6,7 @@
   © - Jitesoft 2018
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-namespace Jitesoft\OAuth\Lumen\Tests;
+namespace Jitesoft\Loauthd\Tests;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Mockery;

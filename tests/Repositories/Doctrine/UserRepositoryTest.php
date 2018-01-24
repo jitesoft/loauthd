@@ -4,18 +4,18 @@
 
   © - Jitesoft 2018
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-namespace Jitesoft\OAuth\Lumen\Tests\Repositories\Doctrine;
+namespace Jitesoft\Loauthd\Tests\Repositories\Doctrine;
 
 use Doctrine\Common\Persistence\ObjectRepository;
 use Illuminate\Hashing\BcryptHasher;
 use Jitesoft\Exceptions\Security\OAuth2\InvalidGrantException;
 use Jitesoft\Log\StdLogger;
-use Jitesoft\OAuth\Lumen\Entities\Client;
-use Jitesoft\OAuth\Lumen\Entities\User;
-use Jitesoft\OAuth\Lumen\OAuth;
-use Jitesoft\OAuth\Lumen\Repositories\Doctrine\Contracts\UserRepositoryInterface;
-use Jitesoft\OAuth\Lumen\Repositories\Doctrine\UserRepository;
-use Jitesoft\OAuth\Lumen\Tests\TestCase;
+use Jitesoft\Loauthd\Entities\Client;
+use Jitesoft\Loauthd\Entities\User;
+use Jitesoft\Loauthd\OAuth;
+use Jitesoft\Loauthd\Repositories\Doctrine\Contracts\UserRepositoryInterface;
+use Jitesoft\Loauthd\Repositories\Doctrine\UserRepository;
+use Jitesoft\Loauthd\Tests\TestCase;
 use Mockery;
 use phpmock\Mock;
 use phpmock\MockBuilder;

@@ -4,12 +4,12 @@
 
   © - Jitesoft 2018
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-namespace Jitesoft\OAuth\Lumen\Entities;
+namespace Jitesoft\Loauthd\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
-use Jitesoft\OAuth\Lumen\Entities\Contracts\UserInterface;
-use Jitesoft\OAuth\Lumen\Entities\Traits\IdTrait;
-use Jitesoft\OAuth\Lumen\Entities\Traits\OAuthUserEntityTrait;
+use Jitesoft\Loauthd\Entities\Contracts\UserInterface;
+use Jitesoft\Loauthd\Entities\Traits\IdTrait;
+use Jitesoft\Loauthd\Entities\Traits\OAuthUserEntityTrait;
 
 /**
  * Class User

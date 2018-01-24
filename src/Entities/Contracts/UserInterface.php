@@ -4,7 +4,7 @@
 
   © - Jitesoft 2018
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-namespace Jitesoft\OAuth\Lumen\Entities\Contracts;
+namespace Jitesoft\Loauthd\Entities\Contracts;
 
 use League\OAuth2\Server\Entities\UserEntityInterface;
 

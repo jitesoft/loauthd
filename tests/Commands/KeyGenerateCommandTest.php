@@ -4,11 +4,11 @@
 
   © - Jitesoft 2018
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-namespace Jitesoft\OAuth\Lumen\Tests\Commands;
+namespace Jitesoft\Loauthd\Tests\Commands;
 
 use Jitesoft\Exceptions\IO\FileException;
-use Jitesoft\OAuth\Lumen\Commands\KeyGenerateCommand;
-use Jitesoft\OAuth\Lumen\Tests\TestCase;
+use Jitesoft\Loauthd\Commands\KeyGenerateCommand;
+use Jitesoft\Loauthd\Tests\TestCase;
 use Mockery;
 use phpmock\MockBuilder;
 

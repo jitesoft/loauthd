@@ -4,13 +4,13 @@
 
   © - Jitesoft 2018
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-namespace Jitesoft\OAuth\Lumen\Tests\Repositories\Doctrine;
+namespace Jitesoft\Loauthd\Tests\Repositories\Doctrine;
 
 use Illuminate\Hashing\BcryptHasher;
 use Jitesoft\Log\StdLogger;
-use Jitesoft\OAuth\Lumen\Repositories\Doctrine\ScopeRepository;
-use Jitesoft\OAuth\Lumen\Repositories\Doctrine\UserRepository;
-use Jitesoft\OAuth\Lumen\Tests\TestCase;
+use Jitesoft\Loauthd\Repositories\Doctrine\ScopeRepository;
+use Jitesoft\Loauthd\Repositories\Doctrine\UserRepository;
+use Jitesoft\Loauthd\Tests\TestCase;
 
 class ScopeRepositoryTest extends TestCase {
 

@@ -6,7 +6,7 @@
   © - Jitesoft 2018
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-namespace Jitesoft\OAuth\Lumen\Guards;
+namespace Jitesoft\Loauthd\Guards;
 
 class AccessTokenGuard {
 

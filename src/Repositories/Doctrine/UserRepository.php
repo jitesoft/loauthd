@@ -4,15 +4,15 @@
 
   © - Jitesoft 2018
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-namespace Jitesoft\OAuth\Lumen\Repositories\Doctrine;
+namespace Jitesoft\Loauthd\Repositories\Doctrine;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Illuminate\Contracts\Hashing\Hasher;
 use Jitesoft\Exceptions\Security\OAuth2\InvalidGrantException;
-use Jitesoft\OAuth\Lumen\Entities\Contracts\UserInterface;
-use Jitesoft\OAuth\Lumen\Entities\User;
-use Jitesoft\OAuth\Lumen\OAuth;
-use Jitesoft\OAuth\Lumen\Repositories\Doctrine\Contracts\UserRepositoryInterface;
+use Jitesoft\Loauthd\Entities\Contracts\UserInterface;
+use Jitesoft\Loauthd\Entities\User;
+use Jitesoft\Loauthd\OAuth;
+use Jitesoft\Loauthd\Repositories\Doctrine\Contracts\UserRepositoryInterface;
 use Psr\Log\LoggerInterface;
 use League\OAuth2\Server\{
     Entities\ClientEntityInterface as Client,
@@ -49,7 +49,7 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
                                                     $grantType,
                                                     Client $clientEntity): ?UserInterface {
 
-        /** @var \Jitesoft\OAuth\Lumen\Entities\Client $clientEntity */
+        /** @var \Jitesoft\Loauthd\Entities\Client $clientEntity */
         if (!array_key_exists($grantType, OAuth::GRANT_TYPES)
             || !$clientEntity->hasGrant(OAuth::GRANT_TYPES[$grantType])) {
             throw new InvalidGrantException('Invalid grant.', $grantType);

@@ -4,12 +4,12 @@
 
   © - Jitesoft 2018
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-namespace Jitesoft\OAuth\Lumen\Entities;
+namespace Jitesoft\Loauthd\Entities;
 
 use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
-use Jitesoft\OAuth\Lumen\Entities\Traits\IdentifierTrait;
-use Jitesoft\OAuth\Lumen\Entities\Traits\IdTrait;
+use Jitesoft\Loauthd\Entities\Traits\IdentifierTrait;
+use Jitesoft\Loauthd\Entities\Traits\IdTrait;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
 

@@ -4,16 +4,16 @@
 
   © - Jitesoft 2018
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-namespace Jitesoft\OAuth\Lumen\Tests\Repositories\Doctrine;
+namespace Jitesoft\Loauthd\Tests\Repositories\Doctrine;
 
 use Doctrine\Common\Persistence\ObjectRepository;
 use Jitesoft\Exceptions\Security\InvalidCredentialsException;
 use Jitesoft\Exceptions\Security\OAuth2\InvalidGrantException;
 use Jitesoft\Log\StdLogger;
-use Jitesoft\OAuth\Lumen\Entities\Client;
-use Jitesoft\OAuth\Lumen\OAuth;
-use Jitesoft\OAuth\Lumen\Repositories\Doctrine\ClientRepository;
-use Jitesoft\OAuth\Lumen\Tests\TestCase;
+use Jitesoft\Loauthd\Entities\Client;
+use Jitesoft\Loauthd\OAuth;
+use Jitesoft\Loauthd\Repositories\Doctrine\ClientRepository;
+use Jitesoft\Loauthd\Tests\TestCase;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 use Mockery;

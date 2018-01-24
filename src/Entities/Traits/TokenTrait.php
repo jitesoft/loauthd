@@ -4,7 +4,7 @@
 
   © - Jitesoft 2018
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-namespace Jitesoft\OAuth\Lumen\Entities\Traits;
+namespace Jitesoft\Loauthd\Entities\Traits;
 
 use Carbon\Carbon;
 use Doctrine\Common\Collections\Collection;

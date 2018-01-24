@@ -4,11 +4,11 @@
 
   © - Jitesoft 2018
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-namespace Jitesoft\OAuth\Lumen\Tests\Entities;
+namespace Jitesoft\Loauthd\Tests\Entities;
 
-use Jitesoft\OAuth\Lumen\Entities\Client;
-use Jitesoft\OAuth\Lumen\OAuth;
-use Jitesoft\OAuth\Lumen\Tests\TestCase;
+use Jitesoft\Loauthd\Entities\Client;
+use Jitesoft\Loauthd\OAuth;
+use Jitesoft\Loauthd\Tests\TestCase;
 
 class ClientTest extends TestCase {
 

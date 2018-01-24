@@ -16,17 +16,17 @@ return [
     */
     'repositories' => [
         League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface::class
-            => Jitesoft\OAuth\Lumen\Repositories\Doctrine\AccessTokenRepository::class,
+            => Jitesoft\Loauthd\Repositories\Doctrine\AccessTokenRepository::class,
         League\OAuth2\Server\Repositories\ClientRepositoryInterface::class
-            => Jitesoft\OAuth\Lumen\Repositories\Doctrine\ClientRepository::class,
+            => Jitesoft\Loauthd\Repositories\Doctrine\ClientRepository::class,
         League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface::class
-            => Jitesoft\OAuth\Lumen\Repositories\Doctrine\RefreshTokenRepository::class,
+            => Jitesoft\Loauthd\Repositories\Doctrine\RefreshTokenRepository::class,
         League\OAuth2\Server\Repositories\ScopeRepositoryInterface::class
-            => Jitesoft\OAuth\Lumen\Repositories\Doctrine\ScopeRepository::class,
+            => Jitesoft\Loauthd\Repositories\Doctrine\ScopeRepository::class,
         League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface::class
-            => Jitesoft\OAuth\Lumen\Repositories\Doctrine\ScopeRepository::class,
-        Jitesoft\OAuth\Lumen\Repositories\Doctrine\Contracts\UserRepositoryInterface::class
-            => Jitesoft\OAuth\Lumen\Repositories\Doctrine\UserRepository::class
+            => Jitesoft\Loauthd\Repositories\Doctrine\ScopeRepository::class,
+        Jitesoft\Loauthd\Repositories\Doctrine\Contracts\UserRepositoryInterface::class
+            => Jitesoft\Loauthd\Repositories\Doctrine\UserRepository::class
     ],
     /*
     |--------------------------------------------------------------------------

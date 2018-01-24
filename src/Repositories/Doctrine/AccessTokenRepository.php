@@ -4,11 +4,11 @@
 
   © - Jitesoft 2018
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-namespace Jitesoft\OAuth\Lumen\Repositories\Doctrine;
+namespace Jitesoft\Loauthd\Repositories\Doctrine;
 
 use Carbon\Carbon;
 use Jitesoft\Exceptions\Database\Entity\UniqueConstraintException;
-use Jitesoft\OAuth\Lumen\Entities\AccessToken;
+use Jitesoft\Loauthd\Entities\AccessToken;
 use League\OAuth2\Server\{
     Entities\AccessTokenEntityInterface as Token,
     Entities\ClientEntityInterface,

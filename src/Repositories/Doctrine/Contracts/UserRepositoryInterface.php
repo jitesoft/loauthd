@@ -4,9 +4,9 @@
 
   © - Jitesoft 2018
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-namespace Jitesoft\OAuth\Lumen\Repositories\Doctrine\Contracts;
+namespace Jitesoft\Loauthd\Repositories\Doctrine\Contracts;
 
-use Jitesoft\OAuth\Lumen\Entities\Contracts\UserInterface;
+use Jitesoft\Loauthd\Entities\Contracts\UserInterface;
 use \League\OAuth2\Server\Repositories\UserRepositoryInterface as LeagueUserRepositoryInterface;
 
 interface UserRepositoryInterface extends LeagueUserRepositoryInterface {

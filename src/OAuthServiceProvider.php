@@ -4,10 +4,10 @@
 
   © - Jitesoft 2018
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-namespace Jitesoft\OAuth\Lumen;
+namespace Jitesoft\Loauthd;
 
 use Illuminate\Support\ServiceProvider;
-use Jitesoft\OAuth\Lumen\Commands\KeyGenerateCommand;
+use Jitesoft\Loauthd\Commands\KeyGenerateCommand;
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\CryptKey;
 use League\OAuth2\Server\Grant\PasswordGrant;

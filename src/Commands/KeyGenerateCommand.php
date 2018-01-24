@@ -4,7 +4,7 @@
 
   © - Jitesoft 2018
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-namespace Jitesoft\OAuth\Lumen\Commands;
+namespace Jitesoft\Loauthd\Commands;
 
 use Illuminate\Console\Command;
 use Jitesoft\Exceptions\IO\FileException;

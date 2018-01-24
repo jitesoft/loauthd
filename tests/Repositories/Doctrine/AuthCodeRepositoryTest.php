@@ -4,14 +4,14 @@
 
   © - Jitesoft 2018
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-namespace Jitesoft\OAuth\Lumen\Tests\Repositories\Doctrine;
+namespace Jitesoft\Loauthd\Tests\Repositories\Doctrine;
 
 use Doctrine\Common\Persistence\ObjectRepository;
 use Jitesoft\Exceptions\Database\Entity\UniqueConstraintException;
 use Jitesoft\Log\NullLogger;
-use Jitesoft\OAuth\Lumen\Entities\AuthCode;
-use Jitesoft\OAuth\Lumen\Repositories\Doctrine\AuthCodeRepository;
-use Jitesoft\OAuth\Lumen\Tests\TestCase;
+use Jitesoft\Loauthd\Entities\AuthCode;
+use Jitesoft\Loauthd\Repositories\Doctrine\AuthCodeRepository;
+use Jitesoft\Loauthd\Tests\TestCase;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
 use Mockery;

@@ -4,17 +4,17 @@
 
   © - Jitesoft 2018
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-namespace Jitesoft\OAuth\Lumen\Tests\Repositories\Doctrine;
+namespace Jitesoft\Loauthd\Tests\Repositories\Doctrine;
 
 use Carbon\Carbon;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Jitesoft\Exceptions\Database\Entity\UniqueConstraintException;
 use Jitesoft\Log\NullLogger;
-use Jitesoft\OAuth\Lumen\Entities\AccessToken;
-use Jitesoft\OAuth\Lumen\Entities\Client;
-use Jitesoft\OAuth\Lumen\Repositories\Doctrine\AccessTokenRepository;
-use Jitesoft\OAuth\Lumen\Tests\TestCase;
+use Jitesoft\Loauthd\Entities\AccessToken;
+use Jitesoft\Loauthd\Entities\Client;
+use Jitesoft\Loauthd\Repositories\Doctrine\AccessTokenRepository;
+use Jitesoft\Loauthd\Tests\TestCase;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use Mockery;
 use Mockery\MockInterface;
