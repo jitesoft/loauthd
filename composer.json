@@ -33,12 +33,12 @@
     ],
     "autoload": {
         "psr-4": {
-            "Jitesoft\\OAuth\\Lumen\\": "src/"
+            "Jitesoft\\Loauthd\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Jitesoft\\OAuth\\Lumen\\Tests\\": "tests/"
+            "Jitesoft\\Loauthd\\Tests\\": "tests/"
         }
     },
     "scripts": {

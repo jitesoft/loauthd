@@ -7,28 +7,47 @@
 namespace Jitesoft\Loauthd\Repositories\Doctrine;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Jitesoft\Exceptions\Security\OAuth2\InvalidGrantException;
-use Jitesoft\Loauthd\Entities\Contracts\ClientInterface;
-use Jitesoft\Loauthd\OAuth;
-use Jitesoft\Loauthd\Repositories\Doctrine\Contracts\UserRepositoryInterface;
+use Jitesoft\Exceptions\{
+    Database\Entity\EntityException, Lazy\NotImplementedException, Security\OAuth2\InvalidGrantException
+};
+use Jitesoft\Loauthd\{
+    Contracts\ScopeValidatorInterface,
+    Entities\Contracts\ClientInterface,
+    Entities\Scope,
+    Entities\User,
+    OAuth,
+    Repositories\Doctrine\Contracts\UserRepositoryInterface,
+    Repositories\Doctrine\Contracts\ScopeRepositoryInterface
+};
 use League\OAuth2\Server\{
     Entities\ClientEntityInterface as Client,
-    Entities\ScopeEntityInterface as Scope,
-    Repositories\ScopeRepositoryInterface
+    Entities\ScopeEntityInterface
 };
 use Psr\Log\LoggerInterface;
 
 class ScopeRepository extends AbstractRepository implements ScopeRepositoryInterface {
 
+    /** @var UserRepositoryInterface */
     protected $userRepository;
 
+    /** @var ScopeValidatorInterface */
+    protected $scopeValidator;
+
+    /**
+     * @param EntityManagerInterface $em
+     * @param LoggerInterface $logger
+     * @param UserRepositoryInterface $userRepository
+     * @param ScopeValidatorInterface $scopeValidator
+     */
     public function __construct(EntityManagerInterface $em,
                                  LoggerInterface $logger,
-                                 UserRepositoryInterface $userRepository) {
+                                 UserRepositoryInterface $userRepository,
+                                 ScopeValidatorInterface $scopeValidator) {
 
         parent::__construct($em, $logger);
 
         $this->userRepository = $userRepository;
+        $this->scopeValidator = $scopeValidator;
     }
 
     /**
@@ -36,10 +55,10 @@ class ScopeRepository extends AbstractRepository implements ScopeRepositoryInter
      *
      * @param string $identifier The scope identifier
      *
-     * @return Scope|null
+     * @return Scope|null|ScopeEntityInterface|object
      */
-    public function getScopeEntityByIdentifier($identifier): Scope {
-        $this->em->getRepository(Scope::class)->findOneBy([
+    public function getScopeEntityByIdentifier($identifier): ?ScopeEntityInterface {
+        return $this->em->getRepository(Scope::class)->findOneBy([
             'identifier' => $identifier
         ]);
     }
@@ -49,11 +68,12 @@ class ScopeRepository extends AbstractRepository implements ScopeRepositoryInter
      * the set of scopes requested are valid and optionally
      * append additional scopes or remove requested scopes.
      *
-     * @param Scope[] $scopes
+     * @param Scope[]|ScopeEntityInterface[]|array $scopes
      * @param string $grantType
      * @param Client|ClientInterface $clientEntity
      * @param null|string $userIdentifier
      * @return array
+     * @throws EntityException
      * @throws InvalidGrantException
      */
     public function finalizeScopes(array $scopes, $grantType, Client $clientEntity, $userIdentifier = null): array {
@@ -62,13 +82,25 @@ class ScopeRepository extends AbstractRepository implements ScopeRepositoryInter
             throw new InvalidGrantException('Invalid grant.', $grantType);
         }
 
-        $outScopes = [];
-
         $user = null;
         if ($userIdentifier) {
             $user = $this->userRepository->getUserByIdentifier($userIdentifier);
         }
 
+        if ($user === null) {
+            throw new EntityException('Entity not found.', User::class);
+        }
+
+        return $this->scopeValidator->validateScopes($scopes, $grantType, $clientEntity, $user, $this);
     }
 
+    /**
+     * Returns all scopes.
+     *
+     * @return array|ScopeEntityInterface[]
+     */
+    public function getAll(): array {
+        throw new NotImplementedException();
+        // TODO: Implement getAll() method.
+    }
 }

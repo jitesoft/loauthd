@@ -35,7 +35,7 @@ class UserRepositoryTest extends TestCase {
         $client = new Client('test', '', null, OAuth::GRANT_TYPE_PASSWORD);
         $user   = new User('abc', 'test', (new BcryptHasher())->make('abc'));
 
-        $this->entityManagerMock->shouldReceive('getRepository')
+        $expectation = $this->entityManagerMock->shouldReceive('getRepository')
             ->once()
             ->with(User::class)
             ->andReturn(
@@ -52,7 +52,7 @@ class UserRepositoryTest extends TestCase {
             ->setNamespace((new \ReflectionClass(UserRepository::class))->getNamespaceName())
             ->setName('config')
             ->setFunction(function(string $config, string $default) {
-                $this->assertEquals('oauth2.user_identification',  $config);
+                $this->assertEquals(OAuth::CONFIG_NAMESPACE. '.user_identification',  $config);
                 $this->assertEquals('authKey', $default);
                 return 'username';
             }
@@ -68,6 +68,7 @@ class UserRepositoryTest extends TestCase {
             );
 
         $this->assertSame($user, $out);
+        $expectation->verify();
     }
 
     public function testGetUserEntityByUserCredentialsInvalidGrant() {
@@ -92,9 +93,9 @@ class UserRepositoryTest extends TestCase {
     }
 
     public function testGetUserByIdentifier() {
-        $user   = new User('abc', 'test', (new BcryptHasher())->make('abc'));
+        $user = new User('abc', 'test', (new BcryptHasher())->make('abc'));
 
-        $this->entityManagerMock->shouldReceive('getRepository')
+        $expectation = $this->entityManagerMock->shouldReceive('getRepository')
             ->once()
             ->with(User::class)
             ->andReturn(
@@ -107,11 +108,12 @@ class UserRepositoryTest extends TestCase {
             );
 
         $out = $this->repository->getUserByIdentifier('abc');
+        $expectation->verify();
         $this->assertSame($out, $user);
     }
 
     public function testGetUserByIdentifierNone() {
-        $this->entityManagerMock->shouldReceive('getRepository')
+        $expectation = $this->entityManagerMock->shouldReceive('getRepository')
             ->once()
             ->with(User::class)
             ->andReturn(
@@ -124,6 +126,7 @@ class UserRepositoryTest extends TestCase {
             );
 
         $out = $this->repository->getUserByIdentifier('abc');
+        $expectation->verify();
         $this->assertNull($out);
     }
 

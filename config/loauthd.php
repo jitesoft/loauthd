@@ -55,6 +55,35 @@ return [
     |
     */
     'token_ttl'           => Carbon\Carbon::now()->addHour(1),
+    /*
+    |--------------------------------------------------------------------------
+    | User identification key.
+    |--------------------------------------------------------------------------
+    |
+    | Key to use when fetching an existing user from the user repository.
+    | The user_identification will be the key of the entity that the repository
+    | searches for. Could be an email, username, identifier or anything.
+    |
+    */
     'user_identification' => 'userName',
-    'password_hash'       => Illuminate\Hashing\BcryptHasher::class
+    /*
+    |--------------------------------------------------------------------------
+    | Password hash.
+    |--------------------------------------------------------------------------
+    |
+    | Hash implementation to use when verifying passwords.
+    |
+    */
+    'password_hash'       => Illuminate\Hashing\BcryptHasher::class,
+    /*
+    |--------------------------------------------------------------------------
+    | Scope validator.
+    |--------------------------------------------------------------------------
+    |
+    | Class which validates the scopes on auth requests.
+    | If you do not use scopes, default implementation can be used, else
+    | implement your own and bind it here.
+    |
+    */
+    Jitesoft\Loauthd\Contracts\ScopeValidatorInterface::class => Jitesoft\Loauthd\ScopeValidator::class
 ];

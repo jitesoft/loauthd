@@ -8,6 +8,7 @@ namespace Jitesoft\Loauthd;
 
 use Illuminate\Support\ServiceProvider;
 use Jitesoft\Loauthd\Commands\KeyGenerateCommand;
+use Jitesoft\Loauthd\Contracts\ScopeValidatorInterface;
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\CryptKey;
 use League\OAuth2\Server\Grant\PasswordGrant;
@@ -36,6 +37,11 @@ class OAuthServiceProvider extends ServiceProvider {
         // Bind all important interfaces.
         $entities     = config(OAuth::CONFIG_NAMESPACE. '.entities', []);
         $repositories = config(OAuth::CONFIG_NAMESPACE. '.repositories', []) ;
+
+        $this->app->bind(ScopeValidatorInterface::class, config(
+            OAuth::CONFIG_NAMESPACE. '.scope_validator',
+            ScopeValidator::class
+        ));
 
         foreach (array_merge($entities, $repositories) as $interface => $class) {
             $this->app->bind($interface, $class);
