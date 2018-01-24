@@ -9,6 +9,9 @@
 namespace Jitesoft\Loauthd;
 
 class OAuth {
+
+    public const CONFIG_NAMESPACE = 'loauthd';
+
     public const GRANT_TYPES = [
         'authorization_code' => self::GRANT_TYPE_AUTH_CODE,
         'refresh_token'      => self::GRANT_TYPE_REFRESH_TOKEN,

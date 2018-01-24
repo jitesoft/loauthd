@@ -1,5 +1,5 @@
 {
-    "name": "jitesoft/loauthd2",
+    "name": "jitesoft/loauthd",
     "description": "OAuth2 bridge for Lumen using doctrine dbal/orm.",
     "require": {
         "ext-openssl": ">=7.1",

@@ -25,18 +25,17 @@ use League\OAuth2\Server\ResourceServer;
 class OAuthServiceProvider extends ServiceProvider {
     /** @var $this->app Application */
 
-
     /** @var  AuthorizationServer */
     protected $authServer;
 
     public function register() {
-        if (config('oauth2', null) === null) {
-            $this->app->configure('oauth2');
+        if (config(OAuth::CONFIG_NAMESPACE, null) === null) {
+            $this->app->configure(OAuth::CONFIG_NAMESPACE);
         }
 
         // Bind all important interfaces.
-        $entities     = config('oauth2.entities', []);
-        $repositories = config('oauth2.repositories', []) ;
+        $entities     = config(OAuth::CONFIG_NAMESPACE. '.entities', []);
+        $repositories = config(OAuth::CONFIG_NAMESPACE. '.repositories', []) ;
 
         foreach (array_merge($entities, $repositories) as $interface => $class) {
             $this->app->bind($interface, $class);
@@ -65,26 +64,26 @@ class OAuthServiceProvider extends ServiceProvider {
     }
 
     protected function registerGrants(AuthorizationServer $server) {
-        $this->makeGrant($server, config('oauth2.grant_types.AuthCode', null), [
+        $this->makeGrant($server, config(OAuth::CONFIG_NAMESPACE. '.grant_types.AuthCode', null), [
             $this->app->make(AuthCodeRepositoryInterface::class),
             $this->app->make(RefreshTokenRepositoryInterface::class),
-            config('oauth2.token_ttl')
+            config(OAuth::CONFIG_NAMESPACE. '.token_ttl')
         ]);
 
-        $this->makeGrant($server, config('oauth2.grant_types.RefreshToken', null), [
+        $this->makeGrant($server, config(OAuth::CONFIG_NAMESPACE. '.grant_types.RefreshToken', null), [
             $this->app->make(RefreshTokenRepositoryInterface::class)
         ]);
 
-        $this->makeGrant($server, config('oauth2.grant_types.Password', null), [
+        $this->makeGrant($server, config(OAuth::CONFIG_NAMESPACE. '.grant_types.Password', null), [
             UserRepositoryInterface::class,
             RefreshTokenRepositoryInterface::class
         ]);
 
-        $this->makeGrant($server, config('oauth2.grant_types.Implicit', null), [
-            config('oauth2.token_ttl')
+        $this->makeGrant($server, config(OAuth::CONFIG_NAMESPACE. '.grant_types.Implicit', null), [
+            config(OAuth::CONFIG_NAMESPACE. '.token_ttl')
         ]);
 
-        $this->makeGrant($server, config('oauth2.grant_types.ClientCredentials', null), []);
+        $this->makeGrant($server, config(OAuth::CONFIG_NAMESPACE. '.grant_types.ClientCredentials', null), []);
 
     }
 
@@ -107,7 +106,7 @@ class OAuthServiceProvider extends ServiceProvider {
             $this->app->make(AccessTokenRepositoryInterface::class),
             $this->app->make(ScopeRepositoryInterface::class),
             new CryptKey(storage_path('/oauth/private.key')),
-            config('oauth2.encryption_key')
+            config(OAuth::CONFIG_NAMESPACE. '.encryption_key')
         );
         return $server;
     }

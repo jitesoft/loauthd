@@ -55,7 +55,7 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
             throw new InvalidGrantException('Invalid grant.', $grantType);
         }
 
-        $value = config('oauth2.user_identification', 'authKey');
+        $value = config(OAuth::CONFIG_NAMESPACE. '.user_identification', 'authKey');
         /** @var UserInterface $user */
         $user = $this->em->getRepository(User::class)->findOneBy([
             $value  => $username
