@@ -6,8 +6,10 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 namespace Jitesoft\OAuth\Lumen\Tests\Repositories\Doctrine;
 
+use Illuminate\Hashing\BcryptHasher;
 use Jitesoft\Log\StdLogger;
 use Jitesoft\OAuth\Lumen\Repositories\Doctrine\ScopeRepository;
+use Jitesoft\OAuth\Lumen\Repositories\Doctrine\UserRepository;
 use Jitesoft\OAuth\Lumen\Tests\TestCase;
 
 class ScopeRepositoryTest extends TestCase {
@@ -17,15 +19,30 @@ class ScopeRepositoryTest extends TestCase {
     protected function setUp() {
         parent::setUp();
 
-        $this->repository = new ScopeRepository($this->entityManagerMock, new StdLogger());
+        $logger           = new StdLogger();
+        $this->repository = new ScopeRepository(
+            $this->entityManagerMock,
+            $logger,
+            new UserRepository($this->entityManagerMock, $logger, new BcryptHasher())
+        );
     }
 
     public function testGetScopeEntityByIdentifier() {
 
 
 
+
+
     }
 
     public function testFinalizeScopes() {}
+
+    public function testFinalizeScopesInvalidGrant() {}
+
+    public function testFinalizeScopesInvalidUser() {}
+
+    public function testFinalizeScopesRemoveScopes() {}
+
+    public function testFinalizeScopesAddScopes() {}
 
 }

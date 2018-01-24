@@ -12,11 +12,11 @@ use Jitesoft\Exceptions\Security\OAuth2\InvalidGrantException;
 use Jitesoft\OAuth\Lumen\Entities\Contracts\UserInterface;
 use Jitesoft\OAuth\Lumen\Entities\User;
 use Jitesoft\OAuth\Lumen\OAuth;
+use Jitesoft\OAuth\Lumen\Repositories\Doctrine\Contracts\UserRepositoryInterface;
 use Psr\Log\LoggerInterface;
 use League\OAuth2\Server\{
     Entities\ClientEntityInterface as Client,
-    Entities\UserEntityInterface as OAuthUser,
-    Repositories\UserRepositoryInterface
+    Entities\UserEntityInterface as OAuthUser
 };
 
 class UserRepository extends AbstractRepository implements UserRepositoryInterface {

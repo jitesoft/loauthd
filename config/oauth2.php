@@ -2,32 +2,6 @@
 
 return [
     'encryption_key' => env('OAUTH_AUTHORIZATION_KEY', ''),
-
-    /*
-    |--------------------------------------------------------------------------
-    | Entities.
-    |--------------------------------------------------------------------------
-    |
-    | Define the entities that the repositories will fetch.
-    | They must implement the given interfaces from League/OAuth2.
-    |
-    | The default entities are doctrine entities.
-    | Recommendation is to change the User entity to your own user models.
-    */
-    'entities' => [
-        League\OAuth2\Server\Entities\AccessTokenEntityInterface::class
-            => Jitesoft\OAuth\Lumen\Entities\AccessToken::class,
-        League\OAuth2\Server\Entities\ClientEntityInterface::class
-            => Jitesoft\OAuth\Lumen\Entities\Client::class,
-        League\OAuth2\Server\Entities\RefreshTokenEntityInterface::class
-            => Jitesoft\OAuth\Lumen\Entities\RefreshToken::class,
-        League\OAuth2\Server\Entities\ScopeEntityInterface::class
-            => Jitesoft\OAuth\Lumen\Entities\Scope::class,
-        League\OAuth2\Server\Entities\AuthCodeEntityInterface::class
-            => Jitesoft\OAuth\Lumen\Entities\AuthCode::class,
-        League\OAuth2\Server\Entities\UserEntityInterface::class
-            => Jitesoft\OAuth\Lumen\Entities\User::class
-    ],
     /*
     |--------------------------------------------------------------------------
     | Repositories.
@@ -37,7 +11,7 @@ return [
     | The default implementations uses the $entityManager->getRepository(entity)
     | methods to fetch the given objects.
     |
-    | Implementations must implement the interfaces from League/OAuth2.
+    | Implementations must implement the interfaces they bind to.
     |
     */
     'repositories' => [
@@ -51,7 +25,7 @@ return [
             => Jitesoft\OAuth\Lumen\Repositories\Doctrine\ScopeRepository::class,
         League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface::class
             => Jitesoft\OAuth\Lumen\Repositories\Doctrine\ScopeRepository::class,
-        League\OAuth2\Server\Repositories\UserRepositoryInterface::class
+        Jitesoft\OAuth\Lumen\Repositories\Doctrine\Contracts\UserRepositoryInterface::class
             => Jitesoft\OAuth\Lumen\Repositories\Doctrine\UserRepository::class
     ],
     /*

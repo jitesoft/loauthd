@@ -27,5 +27,4 @@ interface UserInterface extends UserEntityInterface {
      */
     public function getPassword(): string;
 
-
 }
