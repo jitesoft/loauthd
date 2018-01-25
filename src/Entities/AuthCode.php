@@ -13,6 +13,7 @@ use Jitesoft\Loauthd\Entities\Contracts\AuthCodeInterface;
 use Jitesoft\Loauthd\Entities\Contracts\ClientInterface;
 use Jitesoft\Loauthd\Entities\Contracts\ScopeInterface;
 use Jitesoft\Loauthd\Entities\Traits\IdentifierTrait;
+use Jitesoft\Loauthd\Entities\Traits\IdTrait;
 use Jitesoft\Loauthd\Entities\Traits\TokenTrait;
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
 
@@ -23,6 +24,7 @@ use League\OAuth2\Server\Entities\ScopeEntityInterface;
  * @ORM\Table(name="oauth2_auth_codes")
  */
 class AuthCode implements AuthCodeInterface {
+    use IdTrait;
     use TokenTrait;
     use IdentifierTrait;
 
