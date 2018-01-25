@@ -65,7 +65,7 @@ return [
     | searches for. Could be an email, username, identifier or anything.
     |
     */
-    'user_identification' => 'userName',
+    'user_identification' => env('OAUTH_IDENTIFICATION', 'userName'),
     /*
     |--------------------------------------------------------------------------
     | Password hash.
@@ -86,5 +86,14 @@ return [
     |
     */
     Jitesoft\Loauthd\Contracts\ScopeValidatorInterface::class => Jitesoft\Loauthd\ScopeValidator::class,
-    'key_path' => storage_path('oauth'),
+    /*
+    |--------------------------------------------------------------------------
+    | Key path.
+    |--------------------------------------------------------------------------
+    |
+    | Path to the directory where the public and private keys used by the
+    | oauth service are.
+    |
+    */
+    'key_path' => env('OAUTH_KEYS_PATH', storage_path('oauth')),
 ];

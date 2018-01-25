@@ -12,7 +12,7 @@ use phpseclib\Crypt\RSA;
 
 class KeyGenerateCommand extends Command {
 
-    protected $signature = "oauth:key:gen";
+    protected $signature = "oauth:key:gen {path?}";
 
     protected $description = "Generates the public and private keys used by OAuth.";
 
