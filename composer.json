@@ -20,8 +20,8 @@
         "laravel-doctrine/migrations": "^1.1",
         "laravel/lumen-framework": "^5.5"
     },
-    "suggest": {,
-    "laravel-doctrine/migrations": "^1.1",
+    "suggest": {
+        "laravel-doctrine/migrations": "^1.1",
         "laravel/lumen-framework": "^5.5"
     },
     "license": "MIT",
