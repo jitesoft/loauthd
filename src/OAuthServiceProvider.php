@@ -9,14 +9,14 @@ namespace Jitesoft\Loauthd;
 use Illuminate\Support\ServiceProvider;
 use Jitesoft\Loauthd\Commands\KeyGenerateCommand;
 use Jitesoft\Loauthd\Contracts\ScopeValidatorInterface;
+use Jitesoft\Loauthd\Repositories\Doctrine\Contracts\AccessTokenRepositoryInterface;
+use Jitesoft\Loauthd\Repositories\Doctrine\Contracts\AuthCodeRepositoryInterface;
+use Jitesoft\Loauthd\Repositories\Doctrine\Contracts\ClientRepositoryInterface;
+use Jitesoft\Loauthd\Repositories\Doctrine\Contracts\RefreshTokenRepositoryInterface;
+use Jitesoft\Loauthd\Repositories\Doctrine\Contracts\ScopeRepositoryInterface;
+use Jitesoft\Loauthd\Repositories\Doctrine\Contracts\UserRepositoryInterface;
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\CryptKey;
-use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
-use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
-use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
-use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
-use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
-use League\OAuth2\Server\Repositories\UserRepositoryInterface;
 use League\OAuth2\Server\ResourceServer;
 
 /**

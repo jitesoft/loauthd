@@ -39,11 +39,11 @@ return [
     |
     */
     'grant_types' => [
-        'AuthCode'          => League\OAuth2\Server\Grant\AuthCodeGrant::class,
-        'RefreshToken'      => League\OAuth2\Server\Grant\RefreshTokenGrant::class,
-        'Password'          => League\OAuth2\Server\Grant\PasswordGrant::class,
-        'Implicit'          => League\OAuth2\Server\Grant\ImplicitGrant::class,
-        'ClientCredentials' => League\OAuth2\Server\Grant\ClientCredentialsGrant::class
+        'AuthCode'          => Jitesoft\Loauthd\Grants\AuthCode::class,
+        'RefreshToken'      => Jitesoft\Loauthd\Grants\RefreshToken::class,
+        'Password'          => Jitesoft\Loauthd\Grants\Password::class,
+        'Implicit'          => Jitesoft\Loauthd\Grants\Implicit::class,
+        'ClientCredentials' => Jitesoft\Loauthd\Grants\ClientCredentials::class,
     ],
     /*
     |--------------------------------------------------------------------------
@@ -54,7 +54,7 @@ return [
     | Change to preferred lifetime.
     |
     */
-    'token_ttl'           => Carbon\Carbon::now()->addHour(1),
+    'token_ttl'           => \Carbon\CarbonInterval::create(0, 0, 0, 0, 1, 0, 0),
     /*
     |--------------------------------------------------------------------------
     | User identification key.
