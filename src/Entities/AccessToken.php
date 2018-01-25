@@ -42,16 +42,20 @@ class AccessToken implements AccessTokenInterface {
 
     /**
      * @var ClientInterface
-     * @ORM\OneToMany(
+     * @ORM\ManyToOne(
      *     targetEntity="Client",
-     *     mappedBy="accessTokens"
+     *     inversedBy="accessTokens"
      * )
      */
     protected $client;
 
     /**
      * @var Collection|array|TokenScope[]
-     * @ORM\OneToMany(targetEntity="TokenScope", mappedBy="accessToken", fetch="EAGER")
+     * @ORM\OneToMany(
+     *     targetEntity="TokenScope",
+     *     mappedBy="accessToken",
+     *     orphanRemoval=true
+     * )
      */
     protected $scopes;
 
@@ -70,7 +74,14 @@ class AccessToken implements AccessTokenInterface {
         $this->userIdentifier = $userIdentifier;
         $this->expiry         = $expireTime;
 
-        $this->scopes = new ArrayCollection($scopes);
+        $this->scopes        = new ArrayCollection();
+        $this->refreshTokens = new ArrayCollection();
+
+        if (count($scopes)>0) {
+            foreach ($scopes as $scope) {
+                $this->addScope($scope);
+            }
+        }
     }
 
     /**

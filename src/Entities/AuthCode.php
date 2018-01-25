@@ -30,15 +30,19 @@ class AuthCode implements AuthCodeInterface {
 
     /**
      * @var Collection|array|TokenScope[]
-     * @ORM\OneToMany(targetEntity="TokenScope", mappedBy="authCode", fetch="EAGER")
+     * @ORM\OneToMany(
+     *     targetEntity="TokenScope",
+     *     mappedBy="authCode",
+     *     orphanRemoval=true
+     * )
      */
     protected $scopes;
 
     /**
      * @var ClientInterface
-     * @ORM\OneToMany(
+     * @ORM\ManyToOne(
      *     targetEntity="Client",
-     *     mappedBy="authCodes"
+     *     inversedBy="authCodes"
      * )
      */
     protected $client;

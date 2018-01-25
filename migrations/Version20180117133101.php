@@ -1,11 +1,5 @@
 <?php
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-  Version20180117133101.php - Part of the lumen-doctrine-oauth2 project.
-
-  © - Jitesoft 2018
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
 use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 use LaravelDoctrine\Migrations\Schema\Builder;

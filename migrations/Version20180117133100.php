@@ -48,9 +48,11 @@ class Version20180117133100 extends AbstractMigration {
         (new Builder($schema))->create('oauth2_refresh_tokens', function(Table $table) {
             $table->increments('id');
             $table->string('identifier')->setNotnull(true);
+            $table->integer('access_token_id', false, true);
             $table->timestamp('expiry')->setNotnull(true);
 
             $table->unique('identifier');
+            $table->foreign('oauth2_access_tokens', 'access_token_id', 'id', [], 'refresh_token_access_token_foreign');
         });
 
 
@@ -90,6 +92,9 @@ class Version20180117133100 extends AbstractMigration {
 
         $table = $builder->table('oauth2_access_tokens', function(Table $table) {});
         $table->removeForeignKey('access_token_client_foreign');
+
+        $table = $builder->table('oauth2_refresh_tokens', function(Table $table){});
+        $table->removeForeignKey('refresh_token_access_token_foreign');
 
         $builder->drop('oauth2_token_scopes');
         $builder->drop('oauth2_scopes');

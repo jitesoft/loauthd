@@ -35,7 +35,7 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
         parent::__construct($em, $logger);
 
         $this->hash      = $hash;
-        $this->userClass = config(UserInterface::class);
+        $this->userClass = config(OAuth::CONFIG_NAMESPACE. '.user_model');
         $this->userKey   = config(OAuth::CONFIG_NAMESPACE. '.user_identification', 'authKey');
     }
 
@@ -73,7 +73,7 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
      * @return null|object|UserInterface
      */
     public function getUserByIdentifier(string $identifier): ?UserInterface {
-        return $this->em->getRepository(User::class)->findOneBy([
+        return $this->em->getRepository($this->userClass)->findOneBy([
             'identifier' => $identifier
         ]);
     }

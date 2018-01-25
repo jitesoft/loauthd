@@ -54,7 +54,7 @@ return [
     | Change to preferred lifetime.
     |
     */
-    'token_ttl' => \Carbon\CarbonInterval::create(0, 0, 0, 0, 1, 0, 0),
+    'token_ttl' => Carbon\CarbonInterval::create(0, 0, 0, 0, 1, 0, 0),
     /*
     |--------------------------------------------------------------------------
     | User identification key.
@@ -95,7 +95,7 @@ return [
     | it can be changed here.
     |
     */
-    Jitesoft\Loauthd\Entities\Contracts\UserInterface::class => Jitesoft\Loauthd\Entities\User::class,
+    'user_model' => Jitesoft\Loauthd\Entities\User::class,
     /*
     |--------------------------------------------------------------------------
     | Key path.
