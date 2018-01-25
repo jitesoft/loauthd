@@ -9,7 +9,8 @@
         "laravel-doctrine/orm": "^1.4",
         "jitesoft/loggers": "^1.0",
         "phpseclib/phpseclib": "^2.0",
-        "zendframework/zend-diactoros": "^1.7"
+        "zendframework/zend-diactoros": "^1.7",
+        "symfony/psr-http-message-bridge": "^1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.5",

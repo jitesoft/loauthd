@@ -12,7 +12,7 @@ use phpseclib\Crypt\RSA;
 
 class KeyGenerateCommand extends Command {
 
-    protected $signature = "oauth:key:gen {path?}";
+    protected $signature = "oauth:key:gen {path?} {--force?}";
 
     protected $description = "Generates the public and private keys used by OAuth.";
 
@@ -21,8 +21,10 @@ class KeyGenerateCommand extends Command {
 
         $path = $this->hasArgument('path') ? $this->argument('path') : storage_path('/oauth');
 
-        if (file_exists($path . '/private.key') || file_exists($path . '/public.key')) {
-            throw new FileException('OAuth keys already exist.');
+        if (!$this->hasOption('force')) {
+            if (file_exists($path . '/private.key') || file_exists($path . '/public.key')) {
+                throw new FileException('OAuth keys already exist.');
+            }
         }
 
         if (!is_dir($path)) {
@@ -35,6 +37,7 @@ class KeyGenerateCommand extends Command {
         file_put_contents($path . '/private.key', $keys['privatekey']);
         file_put_contents($path . '/public.key', $keys['publickey']);
         chmod($path . '/private.key', 0600);
+        chmod($path . '/public.key', 0600);
 
         $this->info(sprintf('Successfully generated key pair at %s.', $path));
     }

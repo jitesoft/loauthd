@@ -6,6 +6,9 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 namespace Jitesoft\Loauthd;
 
+use Illuminate\Auth\AuthManager;
+use Illuminate\Auth\RequestGuard;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 use Jitesoft\Loauthd\Commands\KeyGenerateCommand;
 use Jitesoft\Loauthd\Contracts\ScopeValidatorInterface;
@@ -59,6 +62,8 @@ class OAuthServiceProvider extends ServiceProvider {
         $this->app->routeMiddleware([
             'auth:oauth' => OAuth2Middleware::class
         ]);
+
+        $this->registerGuard($this->app->make(AuthManager::class));
     }
 
     public function boot() {
@@ -67,6 +72,22 @@ class OAuthServiceProvider extends ServiceProvider {
                 KeyGenerateCommand::class
             ]);
         }
+    }
+
+    protected function registerGuard(AuthManager $authManager) {
+        $authManager->extend('loauthd', function() {
+
+            $guard = new RequestGuard(function($request) {
+                $oauthGuard = new OAuthGuard(
+                    $this->app->make(ResourceServer::class)
+                );
+                $oauthGuard->user($request);
+                return $oauthGuard;
+            }, $this->app['request']);
+
+            $this->app->refresh('request', $guard, 'setRequest');
+            return $guard;
+        });
     }
 
     protected function registerGrants(AuthorizationServer $server) {
