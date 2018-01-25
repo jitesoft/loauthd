@@ -54,7 +54,7 @@ return [
     | Change to preferred lifetime.
     |
     */
-    'token_ttl'           => \Carbon\CarbonInterval::create(0, 0, 0, 0, 1, 0, 0),
+    'token_ttl' => \Carbon\CarbonInterval::create(0, 0, 0, 0, 1, 0, 0),
     /*
     |--------------------------------------------------------------------------
     | User identification key.
@@ -74,7 +74,7 @@ return [
     | Hash implementation to use when verifying passwords.
     |
     */
-    'password_hash'       => Illuminate\Hashing\BcryptHasher::class,
+    'password_hash' => Illuminate\Hashing\BcryptHasher::class,
     /*
     |--------------------------------------------------------------------------
     | Scope validator.
