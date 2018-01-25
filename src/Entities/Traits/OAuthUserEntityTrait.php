@@ -17,7 +17,7 @@ trait OAuthUserEntityTrait {
 
     /**
      * @var string
-     * @ORM\Column(type="string", name="user_name", length=255, unique=true)
+     * @ORM\Column(type="string", name="password", length=255, unique=false)
      */
     protected $password;
 
