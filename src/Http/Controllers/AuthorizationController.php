@@ -1,7 +1,7 @@
 <?php
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-  AuthorizationController.php - Part of the lumen-doctrine-oauth2 project.
+  AuthorizationController.php - Part of the loauthd project.
 
   © - Jitesoft 2018
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
