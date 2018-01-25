@@ -35,13 +35,13 @@ class OAuthServiceProvider extends ServiceProvider {
         }
 
         // Bind all important interfaces.
-        $repositories = config(OAuth::CONFIG_NAMESPACE. '.repositories', []);
 
         $this->app->bind(ScopeValidatorInterface::class, config(
             OAuth::CONFIG_NAMESPACE. '.scope_validator',
             ScopeValidator::class
         ));
 
+        $repositories = config(OAuth::CONFIG_NAMESPACE. '.repositories', []);
         foreach (array_merge($repositories) as $interface => $class) {
             $this->app->bind($interface, $class);
         }
@@ -81,8 +81,8 @@ class OAuthServiceProvider extends ServiceProvider {
         ]);
 
         $this->makeGrant($server, config(OAuth::CONFIG_NAMESPACE. '.grant_types.Password', null), [
-            UserRepositoryInterface::class,
-            RefreshTokenRepositoryInterface::class
+            $this->app->make(UserRepositoryInterface::class),
+            $this->app->make(RefreshTokenRepositoryInterface::class)
         ]);
 
         $this->makeGrant($server, config(OAuth::CONFIG_NAMESPACE. '.grant_types.Implicit', null), [
@@ -102,8 +102,7 @@ class OAuthServiceProvider extends ServiceProvider {
     }
 
     protected function createAuthServer(): AuthorizationServer {
-        $keyPath = config(OAuth::CONFIG_NAMESPACE. 'key_path');
-
+        $keyPath = config(OAuth::CONFIG_NAMESPACE. '.key_path', storage_path('oauth'));
         return new AuthorizationServer(
             $this->app->make(ClientRepositoryInterface::class),
             $this->app->make(AccessTokenRepositoryInterface::class),
@@ -114,7 +113,7 @@ class OAuthServiceProvider extends ServiceProvider {
     }
 
     protected function createResourceServer(): ResourceServer {
-        $keyPath = config(OAuth::CONFIG_NAMESPACE. 'key_path');
+        $keyPath = config(OAuth::CONFIG_NAMESPACE. '.key_path', storage_path('oauth'));
         return new ResourceServer(
             $this->app->make(AccessTokenRepositoryInterface::class),
             new CryptKey($keyPath . '/public.key')

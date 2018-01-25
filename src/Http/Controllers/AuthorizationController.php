@@ -37,7 +37,7 @@ class AuthorizationController extends Controller {
             );
 
         } catch (OAuthServerException $exception) {
-            return new OAuth2Exception($exception->getMessage(), $exception->getHttpStatusCode(), $exception);
+            throw new OAuth2Exception($exception->getMessage(), $exception->getHttpStatusCode(), $exception);
         }
     }
 

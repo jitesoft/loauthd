@@ -23,8 +23,8 @@ return [
             => Jitesoft\Loauthd\Repositories\Doctrine\RefreshTokenRepository::class,
         Jitesoft\Loauthd\Repositories\Doctrine\Contracts\ScopeRepositoryInterface::class
             => Jitesoft\Loauthd\Repositories\Doctrine\ScopeRepository::class,
-        Jitesoft\Loauthd\Repositories\Doctrine\Contracts\ScopeRepositoryInterface::class
-            => Jitesoft\Loauthd\Repositories\Doctrine\ScopeRepository::class,
+        Jitesoft\Loauthd\Repositories\Doctrine\Contracts\AuthCodeRepositoryInterface::class
+            => Jitesoft\Loauthd\Repositories\Doctrine\AuthCodeRepository::class,
         Jitesoft\Loauthd\Repositories\Doctrine\Contracts\UserRepositoryInterface::class
             => Jitesoft\Loauthd\Repositories\Doctrine\UserRepository::class
     ],
