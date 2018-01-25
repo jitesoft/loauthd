@@ -88,6 +88,16 @@ return [
     Jitesoft\Loauthd\Contracts\ScopeValidatorInterface::class => Jitesoft\Loauthd\ScopeValidator::class,
     /*
     |--------------------------------------------------------------------------
+    | User class.
+    |--------------------------------------------------------------------------
+    |
+    | If you use another user class than the default provided by framework
+    | it can be changed here.
+    |
+    */
+    Jitesoft\Loauthd\Entities\Contracts\UserInterface::class => Jitesoft\Loauthd\Entities\User::class,
+    /*
+    |--------------------------------------------------------------------------
     | Key path.
     |--------------------------------------------------------------------------
     |

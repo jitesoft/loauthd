@@ -19,7 +19,12 @@ use League\OAuth2\Server\Entities\ClientEntityInterface as Client;
 
 class UserRepository extends AbstractRepository implements UserRepositoryInterface {
 
+    /** @var Hasher */
     protected $hash;
+    /** @var string */
+    protected $userClass;
+    /** @var string */
+    protected $userKey;
 
     /**
      * @param EntityManagerInterface $em
@@ -29,7 +34,9 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
     public function __construct(EntityManagerInterface $em, LoggerInterface $logger, Hasher $hash) {
         parent::__construct($em, $logger);
 
-        $this->hash = $hash;
+        $this->hash      = $hash;
+        $this->userClass = config(UserInterface::class);
+        $this->userKey   = config(OAuth::CONFIG_NAMESPACE. '.user_identification', 'authKey');
     }
 
     /**
@@ -53,10 +60,9 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
             throw new InvalidGrantException('Invalid grant.', $grantType);
         }
 
-        $value = config(OAuth::CONFIG_NAMESPACE. '.user_identification', 'authKey');
         /** @var UserInterface $user */
-        $user = $this->em->getRepository(User::class)->findOneBy([
-            $value  => $username
+        $user = $this->em->getRepository($this->userClass)->findOneBy([
+            $this->userKey  => $username
         ]);
 
         return $this->hash->check($password, $user->getPassword()) ? $user : null;
