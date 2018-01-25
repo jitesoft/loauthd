@@ -1,6 +1,6 @@
 {
     "name": "jitesoft/loauthd",
-    "description": "OAuth2 bridge for Lumen using doctrine dbal/orm.",
+    "description": "OAuth2 bridge for Lumen using doctrine dbal/orm and league/oauth2-server as backbone.",
     "require": {
         "ext-openssl": ">=7.1",
         "php": ">=7.1",
@@ -9,9 +9,6 @@
         "laravel-doctrine/orm": "^1.4",
         "jitesoft/loggers": "^1.0",
         "phpseclib/phpseclib": "^2.0",
-        "illuminate/support": "^5.5",
-        "illuminate/container": "^5.5",
-        "illuminate/config": "^5.5",
         "zendframework/zend-diactoros": "^1.7"
     },
     "require-dev": {

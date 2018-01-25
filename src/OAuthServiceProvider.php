@@ -57,7 +57,9 @@ class OAuthServiceProvider extends ServiceProvider {
             return $this->createResourceServer();
         });
 
-        $this->app->routeMiddleware(OAuth2Middleware::class);
+        $this->app->routeMiddleware([
+            'auth:oauth' => OAuth2Middleware::class
+        ]);
     }
 
     public function boot() {
