@@ -20,7 +20,7 @@ use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
  * Class Client
  *
  * @ORM\Entity
- * @ORM\Table(name="oauth2/clients")
+ * @ORM\Table(name="oauth2_clients")
  */
 class Client implements ClientInterface {
     use IdentifierTrait;

@@ -21,7 +21,7 @@ use League\OAuth2\Server\Entities\Traits\AccessTokenTrait;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="oauth2/access_tokens")
+ * @ORM\Table(name="oauth2_access_tokens")
  */
 class AccessToken implements AccessTokenInterface {
     use AccessTokenTrait;

@@ -17,7 +17,7 @@ use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
  * Class RefreshToken
  *
  * @ORM\Entity
- * @ORM\Table(name="oauth2/refresh_tokens")
+ * @ORM\Table(name="oauth2_refresh_tokens")
  */
 class RefreshToken implements RefreshTokenInterface {
     use IdentifierTrait;

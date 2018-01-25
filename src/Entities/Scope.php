@@ -15,7 +15,7 @@ use Jitesoft\Loauthd\Entities\Traits\IdTrait;
  * Class Scope
  *
  * @ORM\Entity
- * @ORM\Table(name="oauth2/scopes")
+ * @ORM\Table(name="oauth2_scopes")
  */
 class Scope implements ScopeInterface {
     use IdTrait;

@@ -18,7 +18,7 @@ use Jitesoft\Loauthd\Entities\Traits\TokenTrait;
  * Class AuthCode
  *
  * @ORM\Entity
- * @ORM\Table(name="oauth2/auth_codes")
+ * @ORM\Table(name="oauth2_auth_codes")
  */
 class AuthCode implements AuthCodeInterface {
     use TokenTrait;

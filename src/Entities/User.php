@@ -19,7 +19,7 @@ use Jitesoft\Loauthd\Entities\Traits\OAuthUserEntityTrait;
  * @see UserInterface
  *
  * @ORM\Entity
- * @ORM\Table(name="oauth2/users")
+ * @ORM\Table(name="oauth2_users")
  */
 class User implements UserInterface {
     use OAuthUserEntityTrait;
