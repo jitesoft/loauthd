@@ -85,5 +85,6 @@ return [
     | implement your own and bind it here.
     |
     */
-    Jitesoft\Loauthd\Contracts\ScopeValidatorInterface::class => Jitesoft\Loauthd\ScopeValidator::class
+    Jitesoft\Loauthd\Contracts\ScopeValidatorInterface::class => Jitesoft\Loauthd\ScopeValidator::class,
+    'key_path' => storage_path('oauth'),
 ];

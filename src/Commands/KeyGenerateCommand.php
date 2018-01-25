@@ -19,7 +19,7 @@ class KeyGenerateCommand extends Command {
     public function handle() {
         $this->info('Generating OAuth public and private keys.');
 
-        $path = storage_path('/oauth');
+        $path = $this->hasArgument('path') ? $this->argument('path') : storage_path('/oauth');
 
         if (file_exists($path . '/private.key') || file_exists($path . '/public.key')) {
             throw new FileException('OAuth keys already exist.');
@@ -36,7 +36,7 @@ class KeyGenerateCommand extends Command {
         file_put_contents($path . '/public.key', $keys['publickey']);
         chmod($path . '/private.key', 0600);
 
-        $this->info('Successfully generated key pair.');
+        $this->info(sprintf('Successfully generated key pair at %s.', $path));
     }
 
 }

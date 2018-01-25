@@ -102,19 +102,22 @@ class OAuthServiceProvider extends ServiceProvider {
     }
 
     protected function createAuthServer(): AuthorizationServer {
+        $keyPath = config(OAuth::CONFIG_NAMESPACE. 'key_path');
+
         return new AuthorizationServer(
             $this->app->make(ClientRepositoryInterface::class),
             $this->app->make(AccessTokenRepositoryInterface::class),
             $this->app->make(ScopeRepositoryInterface::class),
-            new CryptKey(storage_path('/oauth/private.key')),
+            new CryptKey($keyPath . '/private.key'),
             config(OAuth::CONFIG_NAMESPACE. '.encryption_key')
         );
     }
 
     protected function createResourceServer(): ResourceServer {
+        $keyPath = config(OAuth::CONFIG_NAMESPACE. 'key_path');
         return new ResourceServer(
             $this->app->make(AccessTokenRepositoryInterface::class),
-            new CryptKey(storage_path('/oauth/public.key'))
+            new CryptKey($keyPath . '/public.key')
         );
     }
 
