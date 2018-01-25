@@ -8,8 +8,9 @@ namespace Jitesoft\Loauthd\Repositories\Doctrine;
 
 use Jitesoft\Exceptions\Database\Entity\UniqueConstraintException;
 use Jitesoft\Loauthd\Entities\AuthCode;
-use League\OAuth2\Server\Entities\AuthCodeEntityInterface as AuthCodeInterface;
-use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
+use Jitesoft\Loauthd\Entities\Contracts\AuthCodeInterface;
+use Jitesoft\Loauthd\Repositories\Doctrine\Contracts\AuthCodeRepositoryInterface;
+use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 
 class AuthCodeRepository extends AbstractRepository implements AuthCodeRepositoryInterface {
 
@@ -25,11 +26,11 @@ class AuthCodeRepository extends AbstractRepository implements AuthCodeRepositor
     /**
      * Persists a new auth code to permanent storage.
      *
-     * @param AuthCodeInterface $authCodeEntity
+     * @param AuthCodeInterface|AuthCodeEntityInterface $authCodeEntity
      *
      * @throws UniqueConstraintException
      */
-    public function persistNewAuthCode(AuthCodeInterface $authCodeEntity) {
+    public function persistNewAuthCode(AuthCodeEntityInterface $authCodeEntity) {
         $out = $this->em->getRepository(AuthCode::class)->findOneBy([
             'identifier' => $authCodeEntity->getIdentifier()
         ]);

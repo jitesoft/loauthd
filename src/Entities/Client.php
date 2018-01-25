@@ -9,12 +9,12 @@ namespace Jitesoft\Loauthd\Entities;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Jitesoft\Loauthd\Entities\Contracts\ClientInterface;
 use Jitesoft\Loauthd\Entities\Traits\IdentifierTrait;
 use Jitesoft\Loauthd\Entities\Traits\IdTrait;
 use Jitesoft\Loauthd\OAuth;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
-use League\OAuth2\Server\Entities\ClientEntityInterface;
 
 /**
  * Class Client
@@ -22,7 +22,7 @@ use League\OAuth2\Server\Entities\ClientEntityInterface;
  * @ORM\Entity
  * @ORM\Table(name="oauth2/clients")
  */
-class Client implements ClientEntityInterface {
+class Client implements ClientInterface {
     use IdentifierTrait;
     use IdTrait;
 
@@ -91,7 +91,7 @@ class Client implements ClientEntityInterface {
         $this->authCodes    = new ArrayCollection();
     }
 
-    public function firstParty() {
+    public function firstParty(): bool {
         return $this->hasGrant(Oauth::GRANT_TYPE_PASSWORD);
     }
 

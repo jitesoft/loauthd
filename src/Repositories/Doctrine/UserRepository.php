@@ -9,13 +9,13 @@ namespace Jitesoft\Loauthd\Repositories\Doctrine;
 use Doctrine\ORM\EntityManagerInterface;
 use Illuminate\Contracts\Hashing\Hasher;
 use Jitesoft\Exceptions\Security\OAuth2\InvalidGrantException;
+use Jitesoft\Loauthd\Entities\Contracts\ClientInterface;
 use Jitesoft\Loauthd\Entities\Contracts\UserInterface;
 use Jitesoft\Loauthd\Entities\User;
 use Jitesoft\Loauthd\OAuth;
 use Jitesoft\Loauthd\Repositories\Doctrine\Contracts\UserRepositoryInterface;
 use Psr\Log\LoggerInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface as Client;
-use League\OAuth2\Server\Entities\UserEntityInterface as OAuthUser;
 
 class UserRepository extends AbstractRepository implements UserRepositoryInterface {
 
@@ -38,8 +38,8 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
      * @param string $username
      * @param string $password
      * @param string $grantType The grant type used
-     * @param Client $clientEntity
-     * @return OAuthUser|null|UserInterface
+     * @param ClientInterface|Client $clientEntity
+     * @return null|UserInterface
      * @throws InvalidGrantException
      */
     public function getUserEntityByUserCredentials($username,
@@ -64,7 +64,7 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
 
     /**
      * @param string $identifier
-     * @return OAuthUser|null|object|UserInterface
+     * @return null|object|UserInterface
      */
     public function getUserByIdentifier(string $identifier): ?UserInterface {
         return $this->em->getRepository(User::class)->findOneBy([

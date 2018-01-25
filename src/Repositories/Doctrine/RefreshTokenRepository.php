@@ -7,25 +7,26 @@
 namespace Jitesoft\Loauthd\Repositories\Doctrine;
 
 use Jitesoft\Exceptions\Database\Entity\UniqueConstraintException;
+use Jitesoft\Loauthd\Entities\Contracts\RefreshTokenInterface;
 use Jitesoft\Loauthd\Entities\RefreshToken;
+use Jitesoft\Loauthd\Repositories\Doctrine\Contracts\RefreshTokenRepositoryInterface;
 use League\OAuth2\Server\Entities\RefreshTokenEntityInterface as Token;
-use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
 
 class RefreshTokenRepository extends AbstractRepository implements RefreshTokenRepositoryInterface {
 
     /**
      * Creates a new refresh token
      *
-     * @return Token
+     * @return RefreshTokenInterface
      */
-    public function getNewRefreshToken(): Token {
+    public function getNewRefreshToken(): RefreshTokenInterface {
         return new RefreshToken();
     }
 
     /**
      * Create a new refresh token_name.
      *
-     * @param Token $refreshTokenEntity
+     * @param RefreshTokenInterface|Token $refreshTokenEntity
      *
      * @throws UniqueConstraintException
      */

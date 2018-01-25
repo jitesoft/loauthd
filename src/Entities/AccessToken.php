@@ -10,26 +10,27 @@ use Carbon\Carbon;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Jitesoft\Loauthd\Entities\Contracts\AccessTokenInterface;
+use Jitesoft\Loauthd\Entities\Contracts\ClientInterface;
+use Jitesoft\Loauthd\Entities\Contracts\RefreshTokenInterface;
+use Jitesoft\Loauthd\Entities\Contracts\ScopeInterface;
 use Jitesoft\Loauthd\Entities\Traits\IdentifierTrait;
 use Jitesoft\Loauthd\Entities\Traits\IdTrait;
 use Jitesoft\Loauthd\Entities\Traits\TokenTrait;
-use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
-use League\OAuth2\Server\Entities\ClientEntityInterface;
-use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
 use League\OAuth2\Server\Entities\Traits\AccessTokenTrait;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="oauth2/access_tokens")
  */
-class AccessToken implements AccessTokenEntityInterface {
+class AccessToken implements AccessTokenInterface {
     use AccessTokenTrait;
     use TokenTrait;
     use IdentifierTrait;
     use IdTrait;
 
     /**
-     * @var RefreshTokenEntityInterface[]|Collection
+     * @var RefreshTokenInterface[]|Collection
      * @ORM\OneToMany(
      *     targetEntity="RefreshToken",
      *     mappedBy="accessToken",
@@ -39,7 +40,7 @@ class AccessToken implements AccessTokenEntityInterface {
     protected $refreshTokens;
 
     /**
-     * @var ClientEntityInterface
+     * @var ClientInterface
      * @ORM\OneToMany(
      *     targetEntity="Client",
      *     mappedBy="accessTokens"
@@ -48,20 +49,20 @@ class AccessToken implements AccessTokenEntityInterface {
     protected $client;
 
     /**
-     * @var ArrayCollection|Scope[]|array
+     * @var ArrayCollection|ScopeInterface[]|array
      */
     protected $scopes;
 
     /**
-     * @param ClientEntityInterface $client
+     * @param ClientInterface $client
      * @param array $scopes
-     * @param null $userIdentifier
+     * @param string|null $userIdentifier
      * @param Carbon $expireTime
      */
-    public function __construct(ClientEntityInterface $client,
+    public function __construct(ClientInterface $client,
                                 array $scopes,
                                 Carbon $expireTime,
-                                $userIdentifier = null) {
+                                ?string $userIdentifier = null) {
 
         $this->client         = $client;
         $this->userIdentifier = $userIdentifier;

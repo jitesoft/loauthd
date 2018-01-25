@@ -8,6 +8,11 @@ namespace Jitesoft\Loauthd\Entities\Contracts;
 
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 
+/**
+ * Interface ClientInterface
+ *
+ * Contract for Clients.
+ */
 interface ClientInterface extends ClientEntityInterface {
 
     /**

@@ -11,6 +11,7 @@ use Jitesoft\Exceptions\Database\Entity\EntityException;
 use Jitesoft\Exceptions\Security\OAuth2\InvalidGrantException;
 use Jitesoft\Loauthd\Contracts\ScopeValidatorInterface;
 use Jitesoft\Loauthd\Entities\Contracts\ClientInterface;
+use Jitesoft\Loauthd\Entities\Contracts\ScopeInterface;
 use Jitesoft\Loauthd\Entities\Scope;
 use Jitesoft\Loauthd\Entities\User;
 use Jitesoft\Loauthd\OAuth;
@@ -50,9 +51,9 @@ class ScopeRepository extends AbstractRepository implements ScopeRepositoryInter
      *
      * @param string $identifier The scope identifier
      *
-     * @return Scope|null|ScopeEntityInterface|object
+     * @return Scope|null|ScopeInterface|object
      */
-    public function getScopeEntityByIdentifier($identifier): ?ScopeEntityInterface {
+    public function getScopeEntityByIdentifier($identifier): ?ScopeInterface {
         return $this->em->getRepository(Scope::class)->findOneBy([
             'identifier' => $identifier
         ]);
@@ -92,7 +93,7 @@ class ScopeRepository extends AbstractRepository implements ScopeRepositoryInter
     /**
      * Returns all scopes.
      *
-     * @return array|ScopeEntityInterface[]
+     * @return array|ScopeInterface[]
      */
     public function getAll(): array {
         return $this->em->getRepository(Scope::class)->findAll();

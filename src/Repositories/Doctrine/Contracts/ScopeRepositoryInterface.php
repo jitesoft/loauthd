@@ -9,6 +9,11 @@ namespace Jitesoft\Loauthd\Repositories\Doctrine\Contracts;
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
 use League\OAuth2\Server\Repositories\ScopeRepositoryInterface as LeagueRepositoryInterface;
 
+/**
+ * Interface ScopeRepositoryInterface
+ *
+ * Contract for Scope repositories.
+ */
 interface ScopeRepositoryInterface extends LeagueRepositoryInterface {
 
     /**

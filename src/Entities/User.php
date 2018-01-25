@@ -14,6 +14,10 @@ use Jitesoft\Loauthd\Entities\Traits\OAuthUserEntityTrait;
 /**
  * Class User
  *
+ * User entity which could be used either as a decorator or inherited.
+ * If wanted, it could be swapped for another entity implementing the UserInterface contract.
+ * @see UserInterface
+ *
  * @ORM\Entity
  * @ORM\Table(name="oauth2/users")
  */

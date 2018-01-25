@@ -9,6 +9,8 @@ namespace Jitesoft\Loauthd\Entities\Traits;
 use Carbon\Carbon;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Jitesoft\Loauthd\Entities\Contracts\ClientInterface;
+use Jitesoft\Loauthd\Entities\Contracts\ScopeInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
 
@@ -27,12 +29,12 @@ trait TokenTrait {
     protected $userIdentifier;
 
     /**
-     * @var ClientEntityInterface
+     * @var ClientInterface
      */
     protected $client;
 
     /**
-     * @var array|ScopeEntityInterface[]|Collection
+     * @var array|ScopeInterface[]|Collection
      */
     protected $scopes;
 
@@ -42,16 +44,18 @@ trait TokenTrait {
      * @param ScopeEntityInterface $scope
      */
     public function addScope(ScopeEntityInterface $scope) {
-        $this->scopes[$scope->getIdentifier()] = $scope;
+        if (!$this->scopes->contains($scope)) {
+            $this->scopes->add($scope);
+        }
     }
 
     /**
      * Return an array of scopes associated with the token.
      *
-     * @return ScopeEntityInterface[]
+     * @return ScopeInterface[]|array
      */
     public function getScopes() {
-        return array_values($this->scopes);
+        return $this->scopes->toArray();
     }
 
     /**
@@ -69,7 +73,7 @@ trait TokenTrait {
      * @param \DateTime $dateTime
      */
     public function setExpiryDateTime(\DateTime $dateTime) {
-        $this->expiry = $dateTime;
+        $this->expiry = Carbon::instance($dateTime);
     }
 
     /**

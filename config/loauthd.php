@@ -15,13 +15,13 @@ return [
     |
     */
     'repositories' => [
-        League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface::class
+        Jitesoft\Loauthd\Repositories\Doctrine\Contracts\AccessTokenRepositoryInterface::class
             => Jitesoft\Loauthd\Repositories\Doctrine\AccessTokenRepository::class,
-        League\OAuth2\Server\Repositories\ClientRepositoryInterface::class
+        Jitesoft\Loauthd\Repositories\Doctrine\Contracts\ClientRepositoryInterface::class
             => Jitesoft\Loauthd\Repositories\Doctrine\ClientRepository::class,
-        League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface::class
+        Jitesoft\Loauthd\Repositories\Doctrine\Contracts\RefreshTokenRepositoryInterface::class
             => Jitesoft\Loauthd\Repositories\Doctrine\RefreshTokenRepository::class,
-        League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface::class
+        Jitesoft\Loauthd\Repositories\Doctrine\Contracts\ScopeRepositoryInterface::class
             => Jitesoft\Loauthd\Repositories\Doctrine\ScopeRepository::class,
         Jitesoft\Loauthd\Repositories\Doctrine\Contracts\ScopeRepositoryInterface::class
             => Jitesoft\Loauthd\Repositories\Doctrine\ScopeRepository::class,

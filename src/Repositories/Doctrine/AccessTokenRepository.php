@@ -9,27 +9,23 @@ namespace Jitesoft\Loauthd\Repositories\Doctrine;
 use Carbon\Carbon;
 use Jitesoft\Exceptions\Database\Entity\UniqueConstraintException;
 use Jitesoft\Loauthd\Entities\AccessToken;
+use Jitesoft\Loauthd\Entities\Contracts\AccessTokenInterface;
+use Jitesoft\Loauthd\Entities\Contracts\ClientInterface;
+use Jitesoft\Loauthd\Repositories\Doctrine\Contracts\AccessTokenRepositoryInterface;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface as Token;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
-use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
 
-/**
- * Class AccessTokenRepository
- *
- * Doctrine implementation of the AccessTokenRepositoryInterface provided by League\OAuth2\Server.
- * Makes use of the EntityManager::getRepository(AccessToken::class) methods.
- */
 class AccessTokenRepository extends AbstractRepository implements AccessTokenRepositoryInterface {
 
     /**
      * Create a new access token
      *
-     * @param ClientEntityInterface $clientEntity
+     * @param ClientEntityInterface|ClientInterface $clientEntity
      * @param ScopeEntityInterface[] $scopes
      * @param mixed $userIdentifier
      *
-     * @return Token
+     * @return Token|AccessTokenInterface
      */
     public function getNewToken(ClientEntityInterface $clientEntity, array $scopes, $userIdentifier = null): Token {
         $this->logger->debug('Creating new access token.');
@@ -39,7 +35,7 @@ class AccessTokenRepository extends AbstractRepository implements AccessTokenRep
     /**
      * Persists a new access token to permanent storage.
      *
-     * @param Token $accessTokenEntity
+     * @param Token|AccessTokenInterface $accessTokenEntity
      *
      * @throws UniqueConstraintException
      */

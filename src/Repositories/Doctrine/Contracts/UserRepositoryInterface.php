@@ -9,6 +9,11 @@ namespace Jitesoft\Loauthd\Repositories\Doctrine\Contracts;
 use Jitesoft\Loauthd\Entities\Contracts\UserInterface;
 use \League\OAuth2\Server\Repositories\UserRepositoryInterface as LeagueUserRepositoryInterface;
 
+/**
+ * Interface UserRepositoryInterface
+ *
+ * Contract for User repositories.
+ */
 interface UserRepositoryInterface extends LeagueUserRepositoryInterface {
 
     /**
