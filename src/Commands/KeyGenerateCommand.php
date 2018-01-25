@@ -26,7 +26,7 @@ class KeyGenerateCommand extends Command {
         }
 
         if (!is_dir($path)) {
-            mkdir($path, 0660, true);
+            mkdir($path, 0700, true);
         }
 
         $rsa  = new RSA();
@@ -34,8 +34,7 @@ class KeyGenerateCommand extends Command {
 
         file_put_contents($path . '/private.key', $keys['privatekey']);
         file_put_contents($path . '/public.key', $keys['publickey']);
-
-        chmod($path . '/private.key', 600);
+        chmod($path . '/private.key', 0600);
 
         $this->info('Successfully generated key pair.');
     }
