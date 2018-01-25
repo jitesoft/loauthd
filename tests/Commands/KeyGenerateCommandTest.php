@@ -65,9 +65,6 @@ class KeyGenerateCommandTest extends TestCase {
             ->times(3)
             ->getMock();
 
-
-
-
         /** @var Mockery\Mock|KeyGenerateCommand $cmd */
         $cmd->handle();
 

@@ -50,8 +50,8 @@ class AccessToken implements AccessTokenInterface {
     protected $client;
 
     /**
-     * @var ArrayCollection|ScopeInterface[]|array
-     *
+     * @var Collection|array|TokenScope[]
+     * @ORM\OneToMany(targetEntity="TokenScope", mappedBy="accessToken", fetch="EAGER")
      */
     protected $scopes;
 

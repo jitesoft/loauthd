@@ -22,14 +22,23 @@ class Scope implements ScopeInterface {
     use IdentifierTrait;
 
     /**
-     * @param string $identifier
+     * @var string
+     * @ORM\Column(type="string", name="scope_name", length=255)
      */
-    public function __construct(string $identifier) {
+    public $scopeName;
+
+
+    /**
+     * @param string $identifier
+     * @param string $scopeName
+     */
+    public function __construct(string $identifier, ?string $scopeName = null) {
         $this->identifier = $identifier;
+        $this->scopeName  = $scopeName;
     }
 
     public function jsonSerialize() {
-        return json_encode($this->identifier);
+        return json_encode(['identifier' => $this->identifier, 'name' => $this->scopeName]);
     }
 
 }
