@@ -35,7 +35,6 @@ class OAuthServiceProvider extends ServiceProvider {
         }
 
         // Bind all important interfaces.
-        $entities     = config(OAuth::CONFIG_NAMESPACE. '.entities', []);
         $repositories = config(OAuth::CONFIG_NAMESPACE. '.repositories', []);
 
         $this->app->bind(ScopeValidatorInterface::class, config(
@@ -43,7 +42,7 @@ class OAuthServiceProvider extends ServiceProvider {
             ScopeValidator::class
         ));
 
-        foreach (array_merge($entities, $repositories) as $interface => $class) {
+        foreach (array_merge($repositories) as $interface => $class) {
             $this->app->bind($interface, $class);
         }
 
