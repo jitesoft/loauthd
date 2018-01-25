@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Jitesoft\Loauthd\Entities\Contracts\ClientInterface;
 use Jitesoft\Loauthd\Entities\Contracts\ScopeInterface;
+use Jitesoft\Loauthd\Entities\TokenScope;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
 
@@ -43,11 +44,7 @@ trait TokenTrait {
      *
      * @param ScopeEntityInterface $scope
      */
-    public function addScope(ScopeEntityInterface $scope) {
-        if (!$this->scopes->contains($scope)) {
-            $this->scopes->add($scope);
-        }
-    }
+    public abstract function addScope(ScopeEntityInterface $scope);
 
     /**
      * Return an array of scopes associated with the token.
@@ -55,7 +52,9 @@ trait TokenTrait {
      * @return ScopeInterface[]|array
      */
     public function getScopes() {
-        return $this->scopes->toArray();
+        return $this->scopes->map(function(TokenScope $scope) {
+            return $scope->getScope();
+        })->toArray();
     }
 
     /**

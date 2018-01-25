@@ -28,7 +28,15 @@ class KeyGenerateCommandTest extends TestCase {
         $mock->enable();
 
         /** @var Mockery\Mock|KeyGenerateCommand $cmd */
-        $cmd = Mockery::mock(KeyGenerateCommand::class)->makePartial()->shouldReceive('info')->twice()->getMock();
+        $cmd = Mockery::mock(KeyGenerateCommand::class)
+            ->makePartial()
+            ->shouldReceive('hasArgument')
+            ->once()->andReturn(false)
+            ->getMock()
+            ->shouldReceive('info')
+            ->twice()
+            ->getMock();
+
         $cmd->handle();
 
         $this->assertFileExists($this->fileSystem->url() . '/storage/oauth/private.key');
@@ -48,13 +56,24 @@ class KeyGenerateCommandTest extends TestCase {
         $mock->enable();
 
         /** @var Mockery\Mock|KeyGenerateCommand $cmd */
-        $cmd = Mockery::mock(KeyGenerateCommand::class)->makePartial()->shouldReceive('info')->twice()->getMock();
+        $cmd = Mockery::mock(KeyGenerateCommand::class)->makePartial()
+            ->shouldReceive('hasArgument')
+            ->twice()
+            ->andReturn(false)
+            ->getMock()
+            ->shouldReceive('info')
+            ->times(3)
+            ->getMock();
+
+
+
+
+        /** @var Mockery\Mock|KeyGenerateCommand $cmd */
         $cmd->handle();
 
         $this->expectException(FileException::class);
         $this->expectExceptionMessage('OAuth keys already exist.');
 
-        $cmd = Mockery::mock(KeyGenerateCommand::class)->makePartial()->shouldReceive('info')->once()->getMock();
         $cmd->handle();
 
     }

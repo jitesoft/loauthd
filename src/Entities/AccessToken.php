@@ -17,6 +17,7 @@ use Jitesoft\Loauthd\Entities\Contracts\ScopeInterface;
 use Jitesoft\Loauthd\Entities\Traits\IdentifierTrait;
 use Jitesoft\Loauthd\Entities\Traits\IdTrait;
 use Jitesoft\Loauthd\Entities\Traits\TokenTrait;
+use League\OAuth2\Server\Entities\ScopeEntityInterface;
 use League\OAuth2\Server\Entities\Traits\AccessTokenTrait;
 
 /**
@@ -50,6 +51,7 @@ class AccessToken implements AccessTokenInterface {
 
     /**
      * @var ArrayCollection|ScopeInterface[]|array
+     *
      */
     protected $scopes;
 
@@ -69,6 +71,20 @@ class AccessToken implements AccessTokenInterface {
         $this->expiry         = $expireTime;
 
         $this->scopes = new ArrayCollection($scopes);
+    }
+
+    /**
+     * Associate a scope with the token.
+     *
+     * @param ScopeEntityInterface|Scope|ScopeInterface $scope
+     */
+    public function addScope(ScopeEntityInterface $scope) {
+        $has = $this->scopes->exists(function(TokenScope $s) use($scope) {
+            return $s->getScope() === $scope;
+        });
+        if (!$has) {
+            $this->scopes->add(new TokenScope($scope, null, $this));
+        }
     }
 
 }

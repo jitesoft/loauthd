@@ -11,8 +11,10 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Jitesoft\Loauthd\Entities\Contracts\AuthCodeInterface;
 use Jitesoft\Loauthd\Entities\Contracts\ClientInterface;
+use Jitesoft\Loauthd\Entities\Contracts\ScopeInterface;
 use Jitesoft\Loauthd\Entities\Traits\IdentifierTrait;
 use Jitesoft\Loauthd\Entities\Traits\TokenTrait;
+use League\OAuth2\Server\Entities\ScopeEntityInterface;
 
 /**
  * Class AuthCode
@@ -25,7 +27,8 @@ class AuthCode implements AuthCodeInterface {
     use IdentifierTrait;
 
     /**
-     * @var Collection|array|Scope[]
+     * @var Collection|array|TokenScope[]
+     * @ORM\OneToMany(targetEntity="TokenScope", mappedBy="authCode", fetch="EAGER")
      */
     protected $scopes;
 
@@ -44,7 +47,6 @@ class AuthCode implements AuthCodeInterface {
      */
     protected $redirectUri;
 
-
     public function __construct() {
         $this->scopes = new ArrayCollection();
     }
@@ -61,6 +63,20 @@ class AuthCode implements AuthCodeInterface {
      */
     public function setRedirectUri($uri) {
         $this->redirectUri = $uri;
+    }
+
+    /**
+     * Associate a scope with the token.
+     *
+     * @param ScopeEntityInterface|Scope|ScopeInterface $scope
+     */
+    public function addScope(ScopeEntityInterface $scope) {
+        $has = $this->scopes->exists(function(TokenScope $s) use($scope) {
+            return $s->getScope() === $scope;
+        });
+        if (!$has) {
+            $this->scopes->add(new TokenScope($scope, $this));
+        }
     }
 
 }
