@@ -7,15 +7,13 @@
 namespace Jitesoft\Loauthd\Http\Middleware;
 
 use Closure;
-use Exception;
 use Illuminate\Http\Request;
-use Jitesoft\Exceptions\Http\Client\HttpUnauthorizedException;
 use Jitesoft\Exceptions\Security\OAuth2\OAuth2Exception;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\ResourceServer;
 use Zend\Diactoros\ServerRequestFactory;
 
-class AuthenticationMiddleware {
+class OAuth2Middleware {
 
     protected $resourceServer;
 

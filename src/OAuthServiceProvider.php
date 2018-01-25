@@ -9,6 +9,7 @@ namespace Jitesoft\Loauthd;
 use Illuminate\Support\ServiceProvider;
 use Jitesoft\Loauthd\Commands\KeyGenerateCommand;
 use Jitesoft\Loauthd\Contracts\ScopeValidatorInterface;
+use Jitesoft\Loauthd\Http\Middleware\OAuth2Middleware;
 use Jitesoft\Loauthd\Repositories\Doctrine\Contracts\AccessTokenRepositoryInterface;
 use Jitesoft\Loauthd\Repositories\Doctrine\Contracts\AuthCodeRepositoryInterface;
 use Jitesoft\Loauthd\Repositories\Doctrine\Contracts\ClientRepositoryInterface;
@@ -56,7 +57,7 @@ class OAuthServiceProvider extends ServiceProvider {
             return $this->createResourceServer();
         });
 
-        // Create guard.
+        $this->app->routeMiddleware(OAuth2Middleware::class);
     }
 
     public function boot() {
