@@ -13,4 +13,6 @@ use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
  *
  * Contract for AccessTokens
  */
-interface AccessTokenInterface extends AccessTokenEntityInterface { }
+interface AccessTokenInterface extends AccessTokenEntityInterface {
+
+}

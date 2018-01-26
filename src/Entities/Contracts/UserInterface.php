@@ -6,6 +6,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 namespace Jitesoft\Loauthd\Entities\Contracts;
 
+use Jitesoft\Loauthd\Entities\AccessToken;
 use League\OAuth2\Server\Entities\UserEntityInterface;
 
 /**
@@ -14,6 +15,22 @@ use League\OAuth2\Server\Entities\UserEntityInterface;
  * Contract for users.
  */
 interface UserInterface extends UserEntityInterface {
+
+    /**
+     * Set the access token that the user is currently using for authentication.
+     * @internal Used by Loauthd to set token on authorization.
+     *
+     * @param AccessTokenInterface $accessToken
+     */
+    public function setAccessToken(AccessTokenInterface $accessToken);
+
+    /**
+     * Get the access token that the currently logged in user is using for
+     * authentication.
+     *
+     * @return AccessTokenInterface|null
+     */
+    public function getAccessToken(): ?AccessTokenInterface;
 
     /**
      * Get the authentication key of the user.

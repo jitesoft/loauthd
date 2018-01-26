@@ -30,7 +30,6 @@ class AuthorizationController extends Controller {
 
             $response = $this->authorizationServer->respondToAccessTokenRequest($request, new JsonResponse([]));
 
-
             return new \Illuminate\Http\JsonResponse(
                 $response->getBody(),
                 $response->getStatusCode(),

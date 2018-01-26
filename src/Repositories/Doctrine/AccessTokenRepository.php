@@ -91,4 +91,15 @@ class AccessTokenRepository extends AbstractRepository implements AccessTokenRep
         return $out === null;
     }
 
+    /**
+     * Find a single access token by its identifier.
+     *
+     * @param string $identifier
+     * @return AccessTokenInterface|null|object
+     */
+    public function findByIdentifier(string $identifier): ?AccessTokenInterface {
+        return $this->em->getRepository(AccessToken::class)->findOneBy([
+            'identifier' => $identifier
+        ]);
+    }
 }

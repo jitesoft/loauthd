@@ -8,7 +8,7 @@ namespace Jitesoft\Loauthd;
 
 use Illuminate\Auth\AuthManager;
 use Illuminate\Auth\RequestGuard;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
 use Jitesoft\Loauthd\Commands\KeyGenerateCommand;
 use Jitesoft\Loauthd\Contracts\ScopeValidatorInterface;
@@ -63,7 +63,7 @@ class OAuthServiceProvider extends ServiceProvider {
             'auth:oauth' => OAuth2Middleware::class
         ]);
 
-        $this->registerGuard($this->app->make(AuthManager::class));
+        $this->registerGuard($this->app->make('auth'), config());
     }
 
     public function boot() {
@@ -74,17 +74,26 @@ class OAuthServiceProvider extends ServiceProvider {
         }
     }
 
-    protected function registerGuard(AuthManager $authManager) {
-        $authManager->extend('loauthd', function() {
+    protected function createOauthGuard(array $config, AuthManager $authManager, Request $request) {
+        $oauthGuard = new OAuthGuard(
+            $this->app->make(ResourceServer::class),
+            $authManager->createUserProvider($config['provider']),
+            $this->app->make(UserRepositoryInterface::class),
+            $this->app->make(ClientRepositoryInterface::class),
+            $this->app->make(AccessTokenRepositoryInterface::class),
+            $request
+        );
+        $oauthGuard->user();
+        return $oauthGuard;
+    }
 
-            $guard = new RequestGuard(function($request) {
-                $oauthGuard = new OAuthGuard(
-                    $this->app->make(ResourceServer::class)
-                );
-                $oauthGuard->user($request);
-                return $oauthGuard;
+    protected function registerGuard(AuthManager $authManager, array $config) {
+        $authManager->extend('loauthd', function() use($authManager, $config) {
+            $guard = new RequestGuard(function($request) use($authManager, $config) {
+                return $this->createOauthGuard($config, $authManager, $request);
             }, $this->app['request']);
 
+            /** @noinspection PhpUndefinedMethodInspection */
             $this->app->refresh('request', $guard, 'setRequest');
             return $guard;
         });

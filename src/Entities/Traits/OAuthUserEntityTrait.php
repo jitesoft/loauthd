@@ -6,8 +6,27 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 namespace Jitesoft\Loauthd\Entities\Traits;
 
+use Jitesoft\Loauthd\Entities\Contracts\AccessTokenInterface;
+
 trait OAuthUserEntityTrait {
     use IdentifierTrait;
+
+    /** @var AccessTokenInterface|null */
+    protected $token;
+
+    /**
+     * @param AccessTokenInterface $accessToken
+     */
+    public function setAccessToken(AccessTokenInterface $accessToken) {
+        $this->accessToken = $accessToken;
+    }
+
+    /**
+     * @return AccessTokenInterface|null
+     */
+    public function getAccessToken(): ?AccessTokenInterface {
+        return $this->accessToken;
+    }
 
     /**
      * @var string
