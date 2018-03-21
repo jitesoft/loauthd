@@ -1,16 +1,16 @@
 <?php
-
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-  OAuth.php - Part of the loauthd project.
+  GrantHelper.phper.php - Part of the loauthd project.
 
   © - Jitesoft 2018
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+namespace Jitesoft\Loauthd\Grants;
 
-namespace Jitesoft\Loauthd;
+final class GrantHelper {
 
-abstract class OAuth {
-
-    public const CONFIG_NAMESPACE = 'loauthd';
+    private function __construct() {
+        /* Just to disable object creation. */
+    }
 
     public const GRANT_TYPES = [
         'authorization_code' => self::GRANT_TYPE_AUTH_CODE,

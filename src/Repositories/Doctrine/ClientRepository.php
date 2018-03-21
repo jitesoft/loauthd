@@ -10,7 +10,7 @@ use Jitesoft\Exceptions\Security\InvalidCredentialsException;
 use Jitesoft\Exceptions\Security\OAuth2\InvalidGrantException;
 use Jitesoft\Loauthd\Entities\Client;
 use Jitesoft\Loauthd\Entities\Contracts\ClientInterface;
-use Jitesoft\Loauthd\OAuth;
+use Jitesoft\Loauthd\Grants\GrantHelper;
 use Jitesoft\Loauthd\Repositories\Doctrine\Contracts\ClientRepositoryInterface;
 
 class ClientRepository extends AbstractRepository implements ClientRepositoryInterface {
@@ -38,24 +38,35 @@ class ClientRepository extends AbstractRepository implements ClientRepositoryInt
         ]);
 
         if ($client === null) {
+            $this->logger->warning(
+                'Tried to fetch client with identifier {identifier}. Client did not exist.',
+                [ 'identifier' => $identifier ]
+            );
             return $client;
         }
 
         $grantFlag = 0;
         if ($grantType === '*') {
-            foreach (array_values(OAuth::GRANT_TYPES) as $v) {
+            foreach (array_values(GrantHelper::GRANT_TYPES) as $v) {
                 $grantFlag |= $v;
             }
         } else {
-            $grantFlag |= OAuth::GRANT_TYPES[$grantType];
+            $grantFlag |= GrantHelper::GRANT_TYPES[$grantType];
         }
 
         if (!$client->hasGrant($grantFlag)) {
+            $this->logger->warning(
+                'Requested client (id: {id}) did not have the requested grant.',
+                [ 'id' => $client->getId() ]);
             throw new InvalidGrantException('Client did not have requested grant.', $grantType);
         }
 
         if ($mustValidateSecret) {
             if (!$client->validateSecret($secret)) {
+                $this->logger->error(
+                    'Failed to authenticate client with id {id}. Secret was not correct.',
+                    [ 'id' => $client->getId() ]
+                );
                 throw new InvalidCredentialsException('Could not validate Client secret.');
             }
         }

@@ -25,7 +25,7 @@ interface ClientInterface extends ClientEntityInterface {
     /**
      * @param int $grant
      * @return bool
-     * @see OAuth::GRANT_TYPE_*
+     * @see GrantHelper::GRANT_TYPE_*
      */
     public function hasGrant(int $grant): bool;
 

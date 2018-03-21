@@ -36,6 +36,10 @@ class AuthCodeRepository extends AbstractRepository implements AuthCodeRepositor
         ]);
 
         if ($out !== null) {
+            $this->logger->warning(
+                'Failed to persist AuthCode with id {id}. Code already existed.',
+                [ 'id' => $out->getId() ]
+            );
             throw new UniqueConstraintException('AuthCode already exist.', AuthCode::class);
         }
 
@@ -53,6 +57,7 @@ class AuthCodeRepository extends AbstractRepository implements AuthCodeRepositor
         ]);
 
         if ($out === null) {
+            $this->logger->warning('Tried to revoke an auth code which did not exist.');
             return;
         }
 

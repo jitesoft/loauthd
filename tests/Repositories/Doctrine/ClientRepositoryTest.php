@@ -9,9 +9,10 @@ namespace Jitesoft\Loauthd\Tests\Repositories\Doctrine;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Jitesoft\Exceptions\Security\InvalidCredentialsException;
 use Jitesoft\Exceptions\Security\OAuth2\InvalidGrantException;
+use Jitesoft\Log\NullLogger;
 use Jitesoft\Log\StdLogger;
 use Jitesoft\Loauthd\Entities\Client;
-use Jitesoft\Loauthd\OAuth;
+use Jitesoft\Loauthd\Grants\GrantHelper;
 use Jitesoft\Loauthd\Repositories\Doctrine\ClientRepository;
 use Jitesoft\Loauthd\Tests\TestCase;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
@@ -26,11 +27,11 @@ class ClientRepositoryTest extends TestCase {
     protected function setUp() {
         parent::setUp();
 
-        $this->repository = new ClientRepository($this->entityManagerMock, new StdLogger());
+        $this->repository = new ClientRepository($this->entityManagerMock, new NullLogger());
     }
 
     public function testGetClientEntity() {
-        $client = new Client('test', 'example.com', null, OAuth::GRANT_TYPE_PASSWORD);
+        $client = new Client('test', 'example.com', null, GrantHelper::GRANT_TYPE_PASSWORD);
         $client->setIdentifier('test');
 
         $this->entityManagerMock
@@ -74,7 +75,7 @@ class ClientRepositoryTest extends TestCase {
     }
 
     public function testGetClientEntitySecretValidation() {
-        $client = new Client('test', 'example.com', 'secret', OAuth::GRANT_TYPE_PASSWORD);
+        $client = new Client('test', 'example.com', 'secret', GrantHelper::GRANT_TYPE_PASSWORD);
 
         $this->entityManagerMock
             ->shouldReceive('getRepository')
@@ -96,7 +97,7 @@ class ClientRepositoryTest extends TestCase {
     }
 
     public function testGetClientEntitySecretValidationFailure() {
-        $client = new Client('test', 'example.com', '!secret', OAuth::GRANT_TYPE_PASSWORD);
+        $client = new Client('test', 'example.com', '!secret', GrantHelper::GRANT_TYPE_PASSWORD);
 
         $this->entityManagerMock
             ->shouldReceive('getRepository')

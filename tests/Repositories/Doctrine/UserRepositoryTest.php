@@ -9,16 +9,18 @@ namespace Jitesoft\Loauthd\Tests\Repositories\Doctrine;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Illuminate\Hashing\BcryptHasher;
 use Jitesoft\Exceptions\Security\OAuth2\InvalidGrantException;
+use Jitesoft\Loauthd\OAuthServiceProvider;
 use Jitesoft\Log\StdLogger;
 use Jitesoft\Loauthd\Entities\Client;
 use Jitesoft\Loauthd\Entities\User;
-use Jitesoft\Loauthd\OAuth;
+use Jitesoft\Loauthd\Grants\GrantHelper;
 use Jitesoft\Loauthd\Repositories\Doctrine\Contracts\UserRepositoryInterface;
 use Jitesoft\Loauthd\Repositories\Doctrine\UserRepository;
 use Jitesoft\Loauthd\Tests\TestCase;
 use Mockery;
 use phpmock\Mock;
 use phpmock\MockBuilder;
+use ReflectionClass;
 
 class UserRepositoryTest extends TestCase {
 
@@ -28,12 +30,21 @@ class UserRepositoryTest extends TestCase {
     protected function setUp() {
         parent::setUp();
 
+        $builder = new MockBuilder();
+        $mock    = $builder
+            ->setNamespace((new ReflectionClass(OAuthServiceProvider::class))->getNamespaceName())
+            ->setName('config')
+            ->setFunction(function(string $key, $default = null) { return $default; } )
+            ->build();
+
+        $mock->enable();
         $this->repository = new UserRepository($this->entityManagerMock, new StdLogger(), new BcryptHasher());
+        $mock->disable();
     }
 
     public function testGetUserEntityByUserCredentials() {
-        $client = new Client('test', '', null, OAuth::GRANT_TYPE_PASSWORD);
-        $user   = new User('abc', 'test', (new BcryptHasher())->make('abc'));
+        $client = new Client('test', '', null, GrantHelper::GRANT_TYPE_PASSWORD);
+        $user   = new User('abc', (new BcryptHasher())->make('abc'));
 
         $expectation = $this->entityManagerMock->shouldReceive('getRepository')
             ->once()
@@ -42,26 +53,14 @@ class UserRepositoryTest extends TestCase {
                 Mockery::mock(ObjectRepository::class)
                     ->shouldReceive('findOneBy')
                     ->once()
-                    ->with(['username' => 'test'])
+                    ->with(['identifier' => 'abc'])
                     ->andReturn($user)
                     ->getMock()
             );
 
-        $builder = new MockBuilder();
-        $mock    = $builder
-            ->setNamespace((new \ReflectionClass(UserRepository::class))->getNamespaceName())
-            ->setName('config')
-            ->setFunction(function(string $config, string $default) {
-                $this->assertEquals(OAuth::CONFIG_NAMESPACE. '.user_identification',  $config);
-                $this->assertEquals('authKey', $default);
-                return 'username';
-            }
-            )->build();
-        $mock->enable();
-
         $out = $this->repository
             ->getUserEntityByUserCredentials(
-                $user->getAuthKey(),
+                $user->getIdentifier(),
                 'abc',
                 'password',
                 $client
@@ -72,7 +71,7 @@ class UserRepositoryTest extends TestCase {
     }
 
     public function testGetUserEntityByUserCredentialsInvalidGrant() {
-        $client = new Client('test', '', null, OAuth::GRANT_TYPE_PASSWORD);
+        $client = new Client('test', '', null, GrantHelper::GRANT_TYPE_PASSWORD);
 
         try {
             $this->repository

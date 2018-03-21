@@ -27,25 +27,33 @@ use League\OAuth2\Server\ResourceServer;
  * Class OAuthServiceProvider
  */
 class OAuthServiceProvider extends ServiceProvider {
-    /** @var $this->app Application */
+    public const CONFIG_NAMESPACE = 'loauthd';
 
     /** @var  AuthorizationServer */
     protected $authServer;
 
+    /**
+     * @param string $key
+     * @param mixed $default
+     * @return mixed
+     */
+    public static function getConfig(string $key, $default = null) {
+        return config(sprintf('%s.%s', static::CONFIG_NAMESPACE, $key), $default);
+    }
+
     public function register() {
-        if (config(OAuth::CONFIG_NAMESPACE, null) === null) {
-            $this->app->configure(OAuth::CONFIG_NAMESPACE);
+        if (config(static::CONFIG_NAMESPACE, null) === null) {
+            /** @noinspection PhpUndefinedMethodInspection */
+            $this->app->configure(static::CONFIG_NAMESPACE);
         }
 
-        // Bind all important interfaces.
-
         $this->app->bind(ScopeValidatorInterface::class, config(
-            OAuth::CONFIG_NAMESPACE. '.scope_validator',
+            $this->getConfig('scope_validator'),
             ScopeValidator::class
         ));
 
-        $repositories = config(OAuth::CONFIG_NAMESPACE. '.repositories', []);
-        foreach (array_merge($repositories) as $interface => $class) {
+        $repositories = $this->getConfig('repositories', []);
+        foreach ($repositories as $interface => $class) {
             $this->app->bind($interface, $class);
         }
 
@@ -59,11 +67,12 @@ class OAuthServiceProvider extends ServiceProvider {
             return $this->createResourceServer();
         });
 
+        /** @noinspection PhpUndefinedMethodInspection */
         $this->app->routeMiddleware([
             'auth:oauth' => OAuth2Middleware::class
         ]);
 
-        $this->registerGuard($this->app->make('auth'), config());
+        $this->registerGuard($this->app->make('auth'));
     }
 
     public function boot() {
@@ -74,7 +83,7 @@ class OAuthServiceProvider extends ServiceProvider {
         }
     }
 
-    protected function createOauthGuard(array $config, AuthManager $authManager, Request $request) {
+    protected function createOauthGuard(AuthManager $authManager, Request $request, array $config) {
         $oauthGuard = new OAuthGuard(
             $this->app->make(ResourceServer::class),
             $authManager->createUserProvider($config['provider']),
@@ -87,10 +96,11 @@ class OAuthServiceProvider extends ServiceProvider {
         return $oauthGuard;
     }
 
-    protected function registerGuard(AuthManager $authManager, array $config) {
-        $authManager->extend('loauthd', function() use($authManager, $config) {
+    protected function registerGuard(AuthManager $authManager) {
+        $authManager->extend('loauthd', function($app, $name, $config) use($authManager) {
+
             $guard = new RequestGuard(function($request) use($authManager, $config) {
-                return $this->createOauthGuard($config, $authManager, $request);
+                return $this->createOauthGuard($authManager, $request, $config);
             }, $this->app['request']);
 
             /** @noinspection PhpUndefinedMethodInspection */
@@ -100,26 +110,26 @@ class OAuthServiceProvider extends ServiceProvider {
     }
 
     protected function registerGrants(AuthorizationServer $server) {
-        $this->makeGrant($server, config(OAuth::CONFIG_NAMESPACE. '.grant_types.AuthCode', null), [
+        $this->makeGrant($server, $this->getConfig('grant_types.AuthCode', null), [
             $this->app->make(AuthCodeRepositoryInterface::class),
             $this->app->make(RefreshTokenRepositoryInterface::class),
-            config(OAuth::CONFIG_NAMESPACE. '.token_ttl')
+            $this->getConfig('token_ttl')
         ]);
 
-        $this->makeGrant($server, config(OAuth::CONFIG_NAMESPACE. '.grant_types.RefreshToken', null), [
+        $this->makeGrant($server, $this->getConfig('grant_types.RefreshToken', null), [
             $this->app->make(RefreshTokenRepositoryInterface::class)
         ]);
 
-        $this->makeGrant($server, config(OAuth::CONFIG_NAMESPACE. '.grant_types.Password', null), [
+        $this->makeGrant($server, $this->getConfig('grant_types.Password', null), [
             $this->app->make(UserRepositoryInterface::class),
             $this->app->make(RefreshTokenRepositoryInterface::class)
         ]);
 
-        $this->makeGrant($server, config(OAuth::CONFIG_NAMESPACE. '.grant_types.Implicit', null), [
-            config(OAuth::CONFIG_NAMESPACE. '.token_ttl')
+        $this->makeGrant($server, $this->getConfig('grant_types.Implicit', null), [
+            $this->getConfig('token_ttl')
         ]);
 
-        $this->makeGrant($server, config(OAuth::CONFIG_NAMESPACE. '.grant_types.ClientCredentials', null), []);
+        $this->makeGrant($server, $this->getConfig('grant_types.ClientCredentials', null), []);
     }
 
     protected function makeGrant(AuthorizationServer $server, ?string $type, array $args) {
@@ -131,22 +141,28 @@ class OAuthServiceProvider extends ServiceProvider {
         }
     }
 
+    protected function getKey(string $key): string {
+        return sprintf(
+            '%s/%s.key',
+            $this->getConfig('key_path', storage_path('oauth')),
+            $key
+        );
+    }
+
     protected function createAuthServer(): AuthorizationServer {
-        $keyPath = config(OAuth::CONFIG_NAMESPACE. '.key_path', storage_path('oauth'));
         return new AuthorizationServer(
             $this->app->make(ClientRepositoryInterface::class),
             $this->app->make(AccessTokenRepositoryInterface::class),
             $this->app->make(ScopeRepositoryInterface::class),
-            new CryptKey($keyPath . '/private.key'),
-            config(OAuth::CONFIG_NAMESPACE. '.encryption_key')
+            new CryptKey($this->getKey('private')),
+            $this->getConfig('encryption_key')
         );
     }
 
     protected function createResourceServer(): ResourceServer {
-        $keyPath = config(OAuth::CONFIG_NAMESPACE. '.key_path', storage_path('oauth'));
         return new ResourceServer(
             $this->app->make(AccessTokenRepositoryInterface::class),
-            new CryptKey($keyPath . '/public.key')
+            new CryptKey($this->getKey('public'))
         );
     }
 

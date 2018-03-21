@@ -14,16 +14,16 @@ class KeyGenerateCommand extends Command {
 
     protected $signature = "oauth:key:gen {path?} {--force?}";
 
-    protected $description = "Generates the public and private keys used by OAuth.";
+    protected $description = "Generates the public and private keys used by GrantHelper.";
 
     public function handle() {
-        $this->info('Generating OAuth public and private keys.');
+        $this->info('Generating GrantHelper public and private keys.');
 
         $path = $this->hasArgument('path') ? $this->argument('path') : storage_path('/oauth');
 
         if (!$this->hasOption('force')) {
             if (file_exists($path . '/private.key') || file_exists($path . '/public.key')) {
-                throw new FileException('OAuth keys already exist.');
+                throw new FileException('GrantHelper keys already exist.');
             }
         }
 

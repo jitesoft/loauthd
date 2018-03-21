@@ -8,6 +8,8 @@ namespace Jitesoft\Loauthd\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
 use Jitesoft\Loauthd\Entities\Contracts\UserInterface;
+use Jitesoft\Loauthd\Entities\Traits\AuthenticatableTrait;
+use Jitesoft\Loauthd\Entities\Traits\HasTokenTrait;
 use Jitesoft\Loauthd\Entities\Traits\IdTrait;
 use Jitesoft\Loauthd\Entities\Traits\OAuthUserEntityTrait;
 
@@ -22,17 +24,18 @@ use Jitesoft\Loauthd\Entities\Traits\OAuthUserEntityTrait;
  * @ORM\Table(name="oauth2_users")
  */
 class User implements UserInterface {
-    use OAuthUserEntityTrait;
     use IdTrait;
+    use HasTokenTrait;
+    use AuthenticatableTrait;
+
+    protected $identifier;
 
     /**
      * @param string $identifier
-     * @param string $authKey
      * @param string $password
      */
-    public function __construct(string $identifier, string $authKey, string $password) {
+    public function __construct(string $identifier, string $password) {
         $this->identifier = $identifier;
-        $this->authKey    = $authKey;
         $this->password   = $password;
     }
 

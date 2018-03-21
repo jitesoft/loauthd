@@ -14,7 +14,7 @@ use Jitesoft\Loauthd\Entities\Contracts\ClientInterface;
 use Jitesoft\Loauthd\Entities\Contracts\ScopeInterface;
 use Jitesoft\Loauthd\Entities\Scope;
 use Jitesoft\Loauthd\Entities\User;
-use Jitesoft\Loauthd\OAuth;
+use Jitesoft\Loauthd\Grants\GrantHelper;
 use Jitesoft\Loauthd\Repositories\Doctrine\Contracts\UserRepositoryInterface;
 use Jitesoft\Loauthd\Repositories\Doctrine\Contracts\ScopeRepositoryInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface as Client;
@@ -73,8 +73,9 @@ class ScopeRepository extends AbstractRepository implements ScopeRepositoryInter
      * @throws InvalidGrantException
      */
     public function finalizeScopes(array $scopes, $grantType, Client $clientEntity, $userIdentifier = null): array {
-        if (!array_key_exists($grantType, OAuth::GRANT_TYPES)
-            || !$clientEntity->hasGrant(OAuth::GRANT_TYPES[$grantType])) {
+        if (!array_key_exists($grantType, GrantHelper::GRANT_TYPES)
+            || !$clientEntity->hasGrant(GrantHelper::GRANT_TYPES[$grantType])) {
+            $this->logger->error('Requested grant invalid. Client did not have grant.');
             throw new InvalidGrantException('Invalid grant.', $grantType);
         }
 
@@ -83,6 +84,7 @@ class ScopeRepository extends AbstractRepository implements ScopeRepositoryInter
             $user = $this->userRepository->getUserByIdentifier($userIdentifier);
 
             if ($user === null) {
+                $this->logger->error('Failed to fetch user.');
                 throw new EntityException('Entity not found.', User::class);
             }
         }

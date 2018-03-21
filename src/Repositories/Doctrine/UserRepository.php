@@ -8,11 +8,13 @@ namespace Jitesoft\Loauthd\Repositories\Doctrine;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Illuminate\Contracts\Hashing\Hasher;
+use Jitesoft\Exceptions\Security\InvalidCredentialsException;
 use Jitesoft\Exceptions\Security\OAuth2\InvalidGrantException;
 use Jitesoft\Loauthd\Entities\Contracts\ClientInterface;
 use Jitesoft\Loauthd\Entities\Contracts\UserInterface;
 use Jitesoft\Loauthd\Entities\User;
-use Jitesoft\Loauthd\OAuth;
+use Jitesoft\Loauthd\Grants\GrantHelper;
+use Jitesoft\Loauthd\OAuthServiceProvider;
 use Jitesoft\Loauthd\Repositories\Doctrine\Contracts\UserRepositoryInterface;
 use Psr\Log\LoggerInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface as Client;
@@ -35,8 +37,8 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
         parent::__construct($em, $logger);
 
         $this->hash      = $hash;
-        $this->userClass = config(OAuth::CONFIG_NAMESPACE. '.user_model');
-        $this->userKey   = config(OAuth::CONFIG_NAMESPACE. '.user_identification', 'authKey');
+        $this->userClass = OAuthServiceProvider::getConfig('user_model', User::class);
+        $this->userKey   = OAuthServiceProvider::getConfig('user_identification', 'identifier');
     }
 
     /**
@@ -46,7 +48,8 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
      * @param string $password
      * @param string $grantType The grant type used
      * @param ClientInterface|Client $clientEntity
-     * @return null|UserInterface
+     * @return UserInterface|null
+     * @throws InvalidCredentialsException
      * @throws InvalidGrantException
      */
     public function getUserEntityByUserCredentials($username,
@@ -55,8 +58,8 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
                                                     Client $clientEntity): ?UserInterface {
 
         /** @var \Jitesoft\Loauthd\Entities\Client $clientEntity */
-        if (!array_key_exists($grantType, OAuth::GRANT_TYPES)
-            || !$clientEntity->hasGrant(OAuth::GRANT_TYPES[$grantType])) {
+        if (!array_key_exists($grantType, GrantHelper::GRANT_TYPES)
+            || !$clientEntity->hasGrant(GrantHelper::GRANT_TYPES[$grantType])) {
             throw new InvalidGrantException('Invalid grant.', $grantType);
         }
 
@@ -64,6 +67,11 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
         $user = $this->em->getRepository($this->userClass)->findOneBy([
             $this->userKey  => $username
         ]);
+
+        if (!$user) {
+            $this->logger->error('Could not validate user. Invalid credentials.');
+            throw new InvalidCredentialsException('Failed to validate user.');
+        }
 
         return $this->hash->check($password, $user->getPassword()) ? $user : null;
     }

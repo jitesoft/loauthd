@@ -8,6 +8,7 @@ namespace Jitesoft\Loauthd\Tests\Repositories\Doctrine;
 
 use Doctrine\Common\Persistence\ObjectRepository;
 use Jitesoft\Exceptions\Database\Entity\UniqueConstraintException;
+use Jitesoft\Log\NullLogger;
 use Jitesoft\Log\StdLogger;
 use Jitesoft\Loauthd\Entities\RefreshToken;
 use Jitesoft\Loauthd\Repositories\Doctrine\RefreshTokenRepository;
@@ -24,7 +25,7 @@ class RefreshTokenRepositoryTest extends TestCase {
     protected function setUp() {
         parent::setUp();
 
-        $this->repository = new RefreshTokenRepository($this->entityManagerMock, new StdLogger());
+        $this->repository = new RefreshTokenRepository($this->entityManagerMock, new NullLogger());
     }
 
     public function testGetNewRefreshToken() {

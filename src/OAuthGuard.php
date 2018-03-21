@@ -98,6 +98,6 @@ class OAuthGuard implements Guard {
             throw new InvalidCredentialsException('Invalid credentials.');
         }
 
-        $this->userProvider->validateCredentials($user, $credentials);
+        return $this->userProvider->validateCredentials($user, $credentials);
     }
 }

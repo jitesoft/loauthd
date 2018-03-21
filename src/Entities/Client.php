@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Jitesoft\Loauthd\Entities\Contracts\ClientInterface;
 use Jitesoft\Loauthd\Entities\Traits\IdentifierTrait;
 use Jitesoft\Loauthd\Entities\Traits\IdTrait;
-use Jitesoft\Loauthd\OAuth;
+use Jitesoft\Loauthd\Grants\GrantHelper;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 
@@ -92,12 +92,12 @@ class Client implements ClientInterface {
     }
 
     public function firstParty(): bool {
-        return $this->hasGrant(Oauth::GRANT_TYPE_PASSWORD);
+        return $this->hasGrant(GrantHelper::GRANT_TYPE_PASSWORD);
     }
 
     /**
      * @param int $grants
-     * @see OAuth::GRANT_TYPE_*
+     * @see GrantHelper::GRANT_TYPE_*
      */
     public function addGrants(int $grants) {
         $this->grants |= $grants;
@@ -105,7 +105,7 @@ class Client implements ClientInterface {
 
     /**
      * @param int $grants
-     * @see OAuth::GRANT_TYPE_*
+     * @see GrantHelper::GRANT_TYPE_*
      */
     public function removeGrants(int $grants) {
         $this->grants &= ~$grants;
@@ -116,11 +116,11 @@ class Client implements ClientInterface {
     }
 
     /**
-     * Passes a bit-flag for grant types. Verify it against the OAuth::GRANT_TYPES array.
+     * Passes a bit-flag for grant types. Verify it against the GrantHelper::GRANT_TYPES array.
      *
      * @param int $grant
      * @return bool
-     * @see OAuth::GRANT_TYPE_*
+     * @see GrantHelper::GRANT_TYPE_*
      */
     public function hasGrant(int $grant): bool {
         return (($this->grants & $grant) === $grant);

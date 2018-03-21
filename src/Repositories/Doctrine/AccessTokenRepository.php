@@ -21,11 +21,11 @@ class AccessTokenRepository extends AbstractRepository implements AccessTokenRep
     /**
      * Create a new access token
      *
-     * @param ClientEntityInterface|ClientInterface $clientEntity
+     * @param ClientInterface|ClientEntityInterface $clientEntity
      * @param ScopeEntityInterface[] $scopes
-     * @param mixed $userIdentifier
+     * @param string|null $userIdentifier
      *
-     * @return Token|AccessTokenInterface
+     * @return Token
      */
     public function getNewToken(ClientEntityInterface $clientEntity, array $scopes, $userIdentifier = null): Token {
         $this->logger->debug('Creating new access token.');
@@ -35,7 +35,7 @@ class AccessTokenRepository extends AbstractRepository implements AccessTokenRep
     /**
      * Persists a new access token to permanent storage.
      *
-     * @param Token|AccessTokenInterface $accessTokenEntity
+     * @param Token $accessTokenEntity
      *
      * @throws UniqueConstraintException
      */
@@ -44,12 +44,8 @@ class AccessTokenRepository extends AbstractRepository implements AccessTokenRep
            'identifier' => intval($accessTokenEntity->getIdentifier())
         ]);
 
-        $this->logger->debug('Trying to persist new access token. Token does {not}exist.',
-            [
-                'not'  => $out === null ? 'not ' : ''
-            ]
-        );
         if ($out !== null) {
+            $this->logger->warning('Access token with id {id} already exist.', ['id' => $out->getId()]);
             throw new UniqueConstraintException('AccessToken already exist.', AccessToken::class);
         }
 
@@ -70,8 +66,6 @@ class AccessTokenRepository extends AbstractRepository implements AccessTokenRep
             $this->logger->warning('Tried to revoke an access token which did not exist.');
             return;
         }
-
-        $this->logger->debug('Revoking access token.');
 
         $this->em->remove($out);
     }

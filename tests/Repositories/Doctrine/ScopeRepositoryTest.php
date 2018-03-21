@@ -14,14 +14,18 @@ use Jitesoft\Loauthd\Contracts\ScopeValidatorInterface;
 use Jitesoft\Loauthd\Entities\Client;
 use Jitesoft\Loauthd\Entities\Scope;
 use Jitesoft\Loauthd\Entities\User;
-use Jitesoft\Loauthd\OAuth;
+use Jitesoft\Loauthd\Grants\GrantHelper;
+use Jitesoft\Loauthd\OAuthServiceProvider;
 use Jitesoft\Loauthd\Repositories\Doctrine\Contracts\ScopeRepositoryInterface;
 use Jitesoft\Loauthd\ScopeValidator;
+use Jitesoft\Log\NullLogger;
 use Jitesoft\Log\StdLogger;
 use Jitesoft\Loauthd\Repositories\Doctrine\ScopeRepository;
 use Jitesoft\Loauthd\Repositories\Doctrine\UserRepository;
 use Jitesoft\Loauthd\Tests\TestCase;
 use Mockery;
+use phpmock\MockBuilder;
+use ReflectionClass;
 
 class ScopeRepositoryTest extends TestCase {
 
@@ -31,13 +35,24 @@ class ScopeRepositoryTest extends TestCase {
     protected function setUp() {
         parent::setUp();
 
-        $logger           = new StdLogger();
+        $logger  = new NullLogger();
+        $builder = new MockBuilder();
+        $mock    = $builder
+            ->setNamespace((new ReflectionClass(OAuthServiceProvider::class))->getNamespaceName())
+            ->setName('config')
+            ->setFunction(function(string $key, $default = null) {
+                return $default;
+            }
+            )->build();
+
+        $mock->enable();
         $this->repository = new ScopeRepository(
             $this->entityManagerMock,
             $logger,
             new UserRepository($this->entityManagerMock, $logger, new BcryptHasher()),
             new ScopeValidator()
         );
+        $mock->disable();
     }
 
 
@@ -118,7 +133,7 @@ class ScopeRepositoryTest extends TestCase {
     }
 
     public function testFinalizeScopesInvalidUser() {
-        $client      = new Client('test', '', '', OAuth::GRANT_TYPE_PASSWORD);
+        $client      = new Client('test', '', '', GrantHelper::GRANT_TYPE_PASSWORD);
         $expectation = $this->entityManagerMock
             ->shouldReceive('getRepository')
             ->once()
@@ -147,7 +162,7 @@ class ScopeRepositoryTest extends TestCase {
     public function testFinalizeScopesRemoveScopes() {
         $ret    = [new Scope('test'), new Scope('test2')];
         $req    = [new Scope('test'), new Scope('test2'), new Scope('test3')];
-        $client = new Client('test', '', '', OAuth::GRANT_TYPE_PASSWORD);
+        $client = new Client('test', '', '', GrantHelper::GRANT_TYPE_PASSWORD);
 
         $mock = Mockery::mock(ScopeValidatorInterface::class);
         $exp  = $mock->shouldReceive('validateScopes')
@@ -168,7 +183,7 @@ class ScopeRepositoryTest extends TestCase {
     public function testFinalizeScopesAddScopes() {
         $ret    = [new Scope('test'), new Scope('test2')];
         $req    = [new Scope('test2')];
-        $client = new Client('test', '', '', OAuth::GRANT_TYPE_PASSWORD);
+        $client = new Client('test', '', '', GrantHelper::GRANT_TYPE_PASSWORD);
 
         $mock = Mockery::mock(ScopeValidatorInterface::class);
         $exp  = $mock->shouldReceive('validateScopes')

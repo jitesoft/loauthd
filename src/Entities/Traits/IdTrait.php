@@ -9,17 +9,17 @@ namespace Jitesoft\Loauthd\Entities\Traits;
 trait IdTrait {
 
     /**
-     * @var int
+     * @var int|null
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(type="integer", name="id")
+     * @ORM\Column(type="integer", name="id", nullable=false)
      */
     protected $id;
 
     /**
      * @return int
      */
-    public function getId(): int {
+    public function getId(): ?int {
         return $this->id;
     }
 

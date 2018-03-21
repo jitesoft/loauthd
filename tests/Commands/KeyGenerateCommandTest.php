@@ -32,7 +32,8 @@ class KeyGenerateCommandTest extends TestCase {
             ->makePartial()
             ->shouldReceive('hasArgument')
             ->once()->andReturn(false)
-            ->getMock()
+            ->shouldReceive('hasOption')
+            ->once()->andReturn(false)
             ->shouldReceive('info')
             ->twice()
             ->getMock();
@@ -60,7 +61,8 @@ class KeyGenerateCommandTest extends TestCase {
             ->shouldReceive('hasArgument')
             ->twice()
             ->andReturn(false)
-            ->getMock()
+            ->shouldReceive('hasOption')
+            ->twice()->andReturn(false)
             ->shouldReceive('info')
             ->times(3)
             ->getMock();
@@ -69,7 +71,7 @@ class KeyGenerateCommandTest extends TestCase {
         $cmd->handle();
 
         $this->expectException(FileException::class);
-        $this->expectExceptionMessage('OAuth keys already exist.');
+        $this->expectExceptionMessage('GrantHelper keys already exist.');
 
         $cmd->handle();
 
