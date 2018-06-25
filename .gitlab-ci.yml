@@ -1,25 +1,18 @@
+stages:
+  - test
 
-before_script:
-  - composer install --no-interaction --prefer-source
-
-test - php 7.2:
+.test: &test
   stage: test
-  cache:
-    key: "loathd-2-php72:cache"
-    paths:
-      - vendor/
-  image: jitesoft/phpunit:7.2
+  before_script:
+    - composer install --no-interaction --prefer-source
   script:
-    - composer test
+    - vendor/bin/phpunit --configuration phpunit.xml --coverage-text --colors=never
     - vendor/bin/phpcs -p --report=summary --standard=style.xml src
 
-test - php 7.1:
-  stage: test
-  cache:
-    key: "loathd-2-php71:cache"
-    paths:
-      - vendor/
-  image: jitesoft/phpunit:7.1
-  script:
-    - composer test
-    - vendor/bin/phpcs -p --report=summary --standard=style.xml src
+test:php-7.2:
+  image: jitesoft/phpunit:7.2-7
+  <<: *test
+
+test:php-7.1:
+  image: jitesoft/phpunit:7.1-7
+  <<: *test
