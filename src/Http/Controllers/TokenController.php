@@ -7,6 +7,7 @@
 namespace Jitesoft\Loauthd\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Jitesoft\Exceptions\Lazy\NotImplementedException;
 use Laravel\Lumen\Routing\Controller;
 use League\OAuth2\Server\AuthorizationServer;
 use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
@@ -25,8 +26,9 @@ class TokenController extends Controller {
         $this->factory             = new DiactorosFactory();
     }
 
-
-    public function postRefreshTransientToken() {}
+    public function postRefreshTransientToken() {
+        throw new NotImplementedException();
+    }
 
     public function postIssueAccessToken(Request $request) {
         $psrRequest = $this->factory->createRequest($request);

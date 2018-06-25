@@ -96,4 +96,5 @@ class AccessTokenRepository extends AbstractRepository implements AccessTokenRep
             'identifier' => $identifier
         ]);
     }
+
 }

@@ -36,7 +36,7 @@ class RefreshTokenRepository extends AbstractRepository implements RefreshTokenR
         ]) !== null;
 
         if ($has) {
-            $this->logger->warning('Failed to persist Refresh token, token already exists.');
+            $this->logger->warning('Failed to persist Refresh token, token already exist.');
             throw new UniqueConstraintException('RefreshToken already exist.', RefreshToken::class);
         }
 
@@ -55,6 +55,7 @@ class RefreshTokenRepository extends AbstractRepository implements RefreshTokenR
         if ($entity !== null) {
             $this->em->remove($entity);
         }
+
         $this->logger->warning('Failed to revoke refresh token. Token did not exist.');
     }
 

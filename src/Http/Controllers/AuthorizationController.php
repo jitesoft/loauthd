@@ -27,20 +27,15 @@ class AuthorizationController extends Controller {
         $request = ServerRequestFactory::fromGlobals();
 
         try {
-
             $response = $this->authorizationServer->respondToAccessTokenRequest($request, new JsonResponse([]));
-
             return new \Illuminate\Http\JsonResponse(
                 $response->getBody(),
                 $response->getStatusCode(),
                 $response->getHeaders()
             );
-
         } catch (OAuthServerException $exception) {
             throw new OAuth2Exception($exception->getMessage(), $exception->getHttpStatusCode(), $exception);
         }
     }
-
-
 
 }

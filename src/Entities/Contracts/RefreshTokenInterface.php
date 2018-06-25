@@ -13,4 +13,6 @@ use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
  *
  * Contract for refresh tokens.
  */
-interface RefreshTokenInterface extends RefreshTokenEntityInterface { }
+interface RefreshTokenInterface extends RefreshTokenEntityInterface {
+
+}

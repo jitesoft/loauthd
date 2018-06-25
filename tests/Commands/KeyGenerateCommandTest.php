@@ -35,7 +35,7 @@ class KeyGenerateCommandTest extends TestCase {
             ->shouldReceive('hasOption')
             ->once()->andReturn(false)
             ->shouldReceive('info')
-            ->twice()
+            ->times(3)
             ->getMock();
 
         $cmd->handle();
@@ -64,14 +64,14 @@ class KeyGenerateCommandTest extends TestCase {
             ->shouldReceive('hasOption')
             ->twice()->andReturn(false)
             ->shouldReceive('info')
-            ->times(3)
+            ->times(5)
             ->getMock();
 
         /** @var Mockery\Mock|KeyGenerateCommand $cmd */
         $cmd->handle();
 
         $this->expectException(FileException::class);
-        $this->expectExceptionMessage('GrantHelper keys already exist.');
+        $this->expectExceptionMessage('Private key already exist.');
 
         $cmd->handle();
 

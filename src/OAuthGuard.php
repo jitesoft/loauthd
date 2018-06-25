@@ -100,4 +100,5 @@ class OAuthGuard implements Guard {
 
         return $this->userProvider->validateCredentials($user, $credentials);
     }
+
 }

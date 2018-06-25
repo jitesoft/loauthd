@@ -13,4 +13,6 @@ use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
  *
  * Contract for AuthCodes.
  */
-interface AuthCodeInterface extends AuthCodeEntityInterface { }
+interface AuthCodeInterface extends AuthCodeEntityInterface {
+
+}

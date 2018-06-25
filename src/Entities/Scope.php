@@ -27,7 +27,6 @@ class Scope implements ScopeInterface {
      */
     public $scopeName;
 
-
     /**
      * @param string $identifier
      * @param string $scopeName

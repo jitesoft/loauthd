@@ -98,7 +98,6 @@ class OAuthServiceProvider extends ServiceProvider {
 
     protected function registerGuard(AuthManager $authManager) {
         $authManager->extend('loauthd', function($app, $name, $config) use($authManager) {
-
             $guard = new RequestGuard(function($request) use($authManager, $config) {
                 return $this->createOauthGuard($authManager, $request, $config);
             }, $this->app['request']);

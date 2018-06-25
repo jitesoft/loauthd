@@ -19,7 +19,7 @@ class ClientRepository extends AbstractRepository implements ClientRepositoryInt
      * Get a client.
      *
      * @param string $identifier The client's identifier
-     * @param string $grantType The grant type used
+     * @param string|null $grantType The grant type used
      * @param null|string $secret The client's secret (if sent)
      * @param bool $mustValidateSecret If true the client must attempt to validate the secret if the client
      *                                        is confidential
@@ -28,7 +28,7 @@ class ClientRepository extends AbstractRepository implements ClientRepositoryInt
      * @throws InvalidGrantException
      */
     public function getClientEntity($identifier,
-                                    $grantType,
+                                    $grantType = null,
                                     $secret = null,
                                     $mustValidateSecret = true): ?ClientInterface {
 
