@@ -18,6 +18,7 @@ use Jitesoft\Loauthd\Entities\Contracts\UserInterface;
 use Jitesoft\Loauthd\Repositories\Doctrine\Contracts\AccessTokenRepositoryInterface;
 use Jitesoft\Loauthd\Repositories\Doctrine\Contracts\ClientRepositoryInterface;
 use Jitesoft\Loauthd\Repositories\Doctrine\Contracts\UserRepositoryInterface;
+use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\ResourceServer;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
@@ -26,17 +27,11 @@ class OAuthGuard implements Guard {
     use GuardHelpers;
 
     protected $userProvider;
-
     protected $resourceServer;
-
     protected $factory;
-
     protected $userRepository;
-
     protected $accessTokenRepository;
-
     protected $clientRepository;
-
     protected $request;
 
     public function __construct(ResourceServer $resourceServer,
@@ -55,15 +50,31 @@ class OAuthGuard implements Guard {
         $this->request               = $request;
     }
 
-    public function user() {
+    /**
+     * @return Authenticatable|null
+     * @throws EntityException
+     * @throws OAuth2Exception
+     */
+    public function user(): ?Authenticatable {
         if ($this->request->bearerToken() !== null) {
             $psrRequest = $this->factory->createRequest($this->request);
-            $this->authWithToken($psrRequest);
+            return $this->authWithToken($psrRequest);
         }
+
+        return null;
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @throws EntityException
+     * @throws OAuth2Exception
+     */
     protected function authWithToken(ServerRequestInterface $request) {
-        $data = $this->resourceServer->validateAuthenticatedRequest($request);
+        try {
+            $data = $this->resourceServer->validateAuthenticatedRequest($request);
+        } catch (OAuthServerException $ex) {
+            throw new OAuth2Exception($ex->getMessage(), $ex->getCode(), $ex);
+        }
 
         $tokenId          = $data->getAttribute('oauth_access_token_id');
         $userId           = $data->getAttribute('oauth_user_id');

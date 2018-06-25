@@ -4,7 +4,7 @@ stages:
 .test: &test
   stage: test
   before_script:
-    - composer install --no-interaction --prefer-source
+    - composer install --no-interaction --prefer-dist
   script:
     - vendor/bin/phpunit --configuration phpunit.xml --coverage-text --colors=never
     - vendor/bin/phpcs -p --report=summary --standard=style.xml src

@@ -23,8 +23,8 @@ class OAuth2Middleware {
 
     public function handle(Request $request, Closure $next) {
         try {
-            $request = ServerRequestFactory::fromGlobals(); // Get the PSR7 request from globals.
-            $this->resourceServer->validateAuthenticatedRequest($request);
+            // Get the PSR7 request from globals.
+            $this->resourceServer->validateAuthenticatedRequest(ServerRequestFactory::fromGlobals());
         } catch (OAuthServerException $exception) {
             return new OAuth2Exception($exception->getMessage(), $exception->getHttpStatusCode(), $exception);
         }

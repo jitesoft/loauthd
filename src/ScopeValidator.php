@@ -22,7 +22,7 @@ class ScopeValidator implements ScopeValidatorInterface {
      * @param ClientEntityInterface $client
      * @param UserInterface $user
      * @param ScopeRepositoryInterface $scopeRepository
-     * @return array
+     * @return array|ScopeEntityInterface[]
      */
     public function validateScopes(array $scopes,
                                    string $grantType,

@@ -10,6 +10,8 @@ use Illuminate\Auth\AuthManager;
 use Illuminate\Auth\RequestGuard;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
+use Jitesoft\Exceptions\Database\Entity\EntityException;
+use Jitesoft\Exceptions\Security\OAuth2\OAuth2Exception;
 use Jitesoft\Loauthd\Commands\KeyGenerateCommand;
 use Jitesoft\Loauthd\Contracts\ScopeValidatorInterface;
 use Jitesoft\Loauthd\Http\Middleware\OAuth2Middleware;
@@ -83,6 +85,14 @@ class OAuthServiceProvider extends ServiceProvider {
         }
     }
 
+    /**
+     * @param AuthManager $authManager
+     * @param Request     $request
+     * @param array       $config
+     * @return OAuthGuard
+     * @throws EntityException
+     * @throws OAuth2Exception
+     */
     protected function createOauthGuard(AuthManager $authManager, Request $request, array $config) {
         $oauthGuard = new OAuthGuard(
             $this->app->make(ResourceServer::class),
@@ -100,7 +110,7 @@ class OAuthServiceProvider extends ServiceProvider {
         $authManager->extend('loauthd', function($app, $name, $config) use($authManager) {
             $guard = new RequestGuard(function($request) use($authManager, $config) {
                 return $this->createOauthGuard($authManager, $request, $config);
-            }, $this->app['request']);
+            }, $app['request']);
 
             /** @noinspection PhpUndefinedMethodInspection */
             $this->app->refresh('request', $guard, 'setRequest');
