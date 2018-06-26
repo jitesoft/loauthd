@@ -12,3 +12,12 @@ This project is still under development, it should not be seen as stable nor be 
 ## Installation
 
 To be written.
+
+
+### Credits
+
+[Icon by Steffen Nørgaard Andersen](https://thenounproject.com/noergaard/) [(CCBY)](https://creativecommons.org/licenses/by/3.0/us/legalcode).  
+[League\OAuth2](http://oauth2.thephpleague.com/)  
+[Laravel doctrine](https://github.com/laravel-doctrine)  
+
+More to come...
